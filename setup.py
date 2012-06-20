@@ -3,7 +3,7 @@ from distutils.core import setup
 from setuptools import find_packages
 
 setup(
-    name='ceda_markup',
+    name='ceda-markup',
     version='0.0.1',
     author=u'Maurizio Nagni',
     author_email='maurizio.nagni',
