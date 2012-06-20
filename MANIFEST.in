@@ -1,0 +1,2 @@
+include CHANGES README LICENCE
+recursive-include ceda_markup *.py
