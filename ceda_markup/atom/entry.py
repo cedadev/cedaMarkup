@@ -31,6 +31,7 @@ Created on 24 May 2012
 @author: Maurizio Nagni
 '''
 from xml.etree.ElementTree import Element, SubElement
+from ceda_markup import extendElement
 
 class Entry(object):
     '''
@@ -102,13 +103,13 @@ class Entry(object):
         
         if hasattr(self, 'author'):
             if isinstance(self.author, list):
-                entry.extend(self.author)
+                extendElement(entry, self.author)
             else:
                 entry.append(self.author)
                 
         if hasattr(self, 'contributor'):
             if isinstance(self.contributor, list):
-                entry.extend(self.contributor)
+                extendElement(entry, self.contributor)
             else:
                 entry.append(self.contributor)                
                 
@@ -125,7 +126,7 @@ class Entry(object):
 
         if hasattr(self, 'category'):
             if isinstance(self.category, list):
-                entry.extend(self.category)
+                extendElement(entry, self.category)
             else:
                 entry.append(self.category)
                                             

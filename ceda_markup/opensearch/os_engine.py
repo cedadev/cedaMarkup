@@ -32,8 +32,9 @@ Created on 24 May 2012
 '''
 
 import mimetypes
-from ceda_markup.opensearch.query import QueryTag
-from ceda_markup.opensearch.os_engine_helper import OSEngineHelper
+from query import QueryTag
+from os_engine_helper import OSEngineHelper
+
 if not mimetypes.inited:
     mimetypes.init()
     if not mimetypes.types_map.has_key('.atom'):
@@ -71,17 +72,6 @@ class OSEngine(object):
             queries = QueryTag.queryWithRoleRequest(mimetype, self.osRequest.query.params_model, params_values)
             return response.generateResponse(self.osRequest.query.doSearch(**kwargs), [queries], self.osHostURL, **kwargs)
         return None                
-    
-    '''
-    def generateURLPath(self, ospath):
-        """
-            Generate the proper URL path, before the parameters, for the Opensearch:URL tag.
-            This method is supposed to be overridden by classes extending OSREsponse            
-            @param ospath: same value of OSEngine.path
-            @return the default implementation return ospath. 
-        """
-        return ospath
-    '''    
     
     def getDescription(self, ospath):
         reqDoc = self.osRequest.getDescription(ospath)

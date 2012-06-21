@@ -30,7 +30,7 @@ Created on 5 May 2012
 
 @author: Maurizio Nagni
 '''
-from ceda_markup.template.osresponse import OSResponse
+from osresponse import OSResponse
 
 class OSAtomResponse(OSResponse):
     '''

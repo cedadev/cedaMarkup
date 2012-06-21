@@ -32,8 +32,8 @@ Created on 5 May 2012
 '''
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom import minidom
-from ceda_markup.opensearch.os_engine import get_mimetype
-from ceda_markup.opensearch.osquery import URL_REL_DEFAULT, URL_INDEX_OFFSET_DEFAULT,\
+from os_engine import get_mimetype
+from osquery import URL_REL_DEFAULT, URL_INDEX_OFFSET_DEFAULT,\
     URL_PAGE_OFFSET_DEFAULT
 
 MAX_OS_SHORT_NAME_LEN = 16
@@ -76,6 +76,8 @@ class OpenSearchRequest(object):
         '''
         self.query = query
         self.responses = responses
+        self.os_syndacation_right = None
+        self.os_adult_content = True
 
         if os_description:
             self.os_description = os_description[:MAX_OS_DESCRIPTION_LEN]
@@ -102,8 +104,8 @@ class OpenSearchRequest(object):
         if os_syndacation_right and os_syndacation_right in OS_SYNDACATION_RIGHT:
             self.os_syndacation_right = os_syndacation_right            
             
-        if os_adult_content and os_adult_content not in ['false', 'FALSE', '0', 'no', 'NO']:
-            self.os_adult_content = True                        
+        if os_adult_content and os_adult_content in ['false', 'FALSE', '0', 'no', 'NO']:
+            self.os_adult_content = False                        
             
         self.os_image = os_image
         self.os_language = os_language
@@ -168,9 +170,7 @@ class OpenSearchRequest(object):
                 ie.text = item             
         
         for item in self.responses:            
-            url = self._buildTemplateURL(top, item.extension, self.query.rel, self.query.indexOffset, self.query.pageOffset, ospath)
-            #self.oshelper.assignNamespacePrefix(url)    
-            
+            self._buildTemplateURL(top, item.extension, self.query.rel, self.query.indexOffset, self.query.pageOffset, ospath)
         
         reparsed = minidom.parseString(tostring(top))
         return reparsed.toprettyxml(indent="  ")
