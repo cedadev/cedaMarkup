@@ -10,7 +10,7 @@ VERSION = re.compile(r".*__version__ = '(.*?)'",
 
 setup(
     name='ceda-markup',
-    version='0.0.1',
+    version=VERSION,
     author=u'Maurizio Nagni',
     author_email='maurizio.nagni',
     packages=find_packages(),
