@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from distutils.core import setup
 from setuptools import find_packages
-import re, os
+import re
+from os import path
 
-v_file = open(os.path.join(os.path.dirname(__file__), 
+v_file = open(path.join(path.dirname(__file__), 
                         'ceda_markup', '__init__.py'))
 VERSION = re.compile(r".*__version__ = '(.*?)'",
                      re.S).match(v_file.read()).group(1)

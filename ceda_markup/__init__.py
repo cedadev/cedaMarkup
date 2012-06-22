@@ -31,7 +31,7 @@ Created on 21 Jun 2012
 @author: Maurizio Nagni
 '''
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 def extendElement(element, collectionToAppend):
     '''
