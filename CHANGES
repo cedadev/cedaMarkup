@@ -1,2 +1,6 @@
 0.0.1
 First packaging
+
+0.0.2
+Fixed
+"Type is not allowed" - atom.info.py had a wrong parameter  

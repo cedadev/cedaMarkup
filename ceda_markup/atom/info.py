@@ -47,7 +47,7 @@ class Info(object):
         '''
         Constructor
         '''
-        if type in Info.TYPES:
+        if itype in Info.TYPES:
             self.type = itype
         else:
             raise Exception("Type is not allowed")
