@@ -3,4 +3,8 @@ First packaging
 
 0.0.2
 Fixed
-"Type is not allowed" - atom.info.py had a wrong parameter  
+"Type is not allowed" - atom.info.py had a wrong parameter
+
+0.0.3
+Added GML ValidationTime
+major refactoring (not compatible with previous version)  
