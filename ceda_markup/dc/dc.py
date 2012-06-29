@@ -30,44 +30,27 @@ Created on 24 May 2012
 
 @author: Maurizio Nagni
 '''
-from xml.etree.ElementTree import Element
+from ceda_markup.markup import createMarkup
 
-class DC(object):
+DC_NAMESPACE = 'http://purl.org/dc/elements/1.1/'
+DC_PREFIX = 'dc'
+DC_ROOT_TAG = 'metadata'
+
+def createDC(root = None, tagName = DC_ROOT_TAG, ns = DC_NAMESPACE):      
     '''
-    classdocs
+        @param root: the root tag of the document containing this element
+        @param tagName: the tagName 
+        @param ns: the tag namespace       
     '''
+    return createMarkup(tagName, DC_PREFIX, ns, root)
 
-    NAMESPACE = 'http://purl.org/dc/elements/1.1/'
-    PREFIX = 'dc'
-    ROOT_TAG = 'metadata'
-
-    def __init__(self, root = None):               
-        '''
-            Constructor
-        '''
-        self._hasns = False
-        self._root = root
-        if self._root is not None:
-            self._hasns = True
-        else:
-            self._root = Element(DC.ROOT_TAG)
-            
-        self._root.set("xmlns:%s" % (DC.PREFIX), DC.NAMESPACE)        
-
-class Date(DC):
+def createDate(root = None, body = None, ns = DC_NAMESPACE):      
     '''
-    classdocs
+        @param root: the root tag of the document containing this element
+        @param body: the date value
+        @param ns: the tag namespace 
     '''
-
-    def __init__(self, root, date):
-        '''
-        Constructor
-        '''
-        self.date = date
-        super(Date, self).__init__(root)
-    
-    def buildElement(self):
-        date =  Element("%s:%s" % (DC.PREFIX, 'date'))
-        date.text = self.date
-        return date    
-                    
+    date = createMarkup('date', DC_PREFIX, ns, root)
+    if body is not None:
+        date.text = body
+    return date

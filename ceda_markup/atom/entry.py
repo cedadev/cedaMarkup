@@ -30,112 +30,44 @@ Created on 24 May 2012
 
 @author: Maurizio Nagni
 '''
-from xml.etree.ElementTree import Element, SubElement
 from ceda_markup import extendElement
+from ceda_markup.atom.atom import ATOM_NAMESPACE, ATOM_PREFIX
+from ceda_markup.markup import createMarkup
 
-class Entry(object):
-    '''
-    classdocs
-    '''
-
-
-    def __init__(self, iid, title, updated, \
+def createEntry(iid, title, updated, \
                  author = None, content = None, link = None, \
-                 summary = None, category = None, contributor = None, \
-                 published = None, source = None, rights = None):
+                 published = None, root = None, 
+                 ns = ATOM_NAMESPACE):      
         '''
             Constructor
-            @param id: a unique identifier, eventually an URI
-            @param title: an atom.Entry instance 
-            @param updated: the last time the record was updated
+            @param iid: an atom.ID instance
+            @param title: an atom.Title instance 
+            @param updated: an atom.Update instance
             @param author: one or more atom.Author instances
             @param content: an atom.Content instance             
-            @param link: one or more atom.Link instances
-            @param summary: an atom.Summary instance                        
-            @param category:             
-            @param contributor: one or more atom.Contributor instances
-            @param published:                         
-            @param source: 
-            @param rights: an atom.Rights instance                        
+            @param link: one or more atom.Link instances                                     
+            @param published: an atom.Published instance                          
+            @param root: the document root element where attach the prefix:namespace for this element                        
         '''
-        self.id = iid
-        self.title = title
-        self.updated = updated        
+        markup = createMarkup('entry', ATOM_PREFIX, ns, root)        
+        markup.append(iid)                
+        markup.append(title)        
+        markup.append(updated)
         
         if author:
-            self.author = author
-        
-        if content is not None:
-            self.content = content
-                    
-        if link:
-            self.link = link
-            
-        if summary:
-            self.summary = summary
-            
-        if category:
-            self.category = category
-            
-        if contributor:
-            self.contributor = contributor                                    
-                        
-        if published:
-            self.published = published
-            
-        if source:
-            self.source = source                    
-            
-        if rights:
-            self.rights = rights
-                        
-    def buildElement(self):
-        entry = Element("entry")
-        
-        iid = SubElement(entry, 'id')
-        iid.text = self.id
-        
-        title = SubElement(entry, 'title')
-        title.text = self.title
-        
-        updated = SubElement(entry, 'updated')
-        updated.text = self.updated
-        
-        if hasattr(self, 'author'):
-            if isinstance(self.author, list):
-                extendElement(entry, self.author)
+            if isinstance(author, list):
+                extendElement(markup, author)
             else:
-                entry.append(self.author)
+                markup.append(author)               
                 
-        if hasattr(self, 'contributor'):
-            if isinstance(self.contributor, list):
-                extendElement(entry, self.contributor)
-            else:
-                entry.append(self.contributor)                
-                
-        if hasattr(self, 'content'):
-            entry.append(self.content)
+        if content:
+            markup.append(content)
             
-        if hasattr(self, 'link'):
-            link = SubElement(entry, 'link')
-            link.text = self.link
-            
-        if hasattr(self, 'summary'):
-            summary = SubElement(entry, 'summary')
-            summary.text = self.summary
-
-        if hasattr(self, 'category'):
-            if isinstance(self.category, list):
-                extendElement(entry, self.category)
-            else:
-                entry.append(self.category)
+        if link is not None:
+            markup.append(link)
                                             
-        if hasattr(self, 'published'):
-            published = SubElement(entry, 'published')
-            published.text = self.published             
-            
-        if hasattr(self, 'source'):
-            source = SubElement(entry, 'source')
-            source.text = self.source          
+        if published:
+            markup.append(published)               
+              
+        return markup
         
-        return entry  

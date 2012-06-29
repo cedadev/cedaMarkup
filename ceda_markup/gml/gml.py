@@ -30,105 +30,122 @@ Created on 24 May 2012
 
 @author: Maurizio Nagni
 '''
-from xml.etree.ElementTree import Element
+from ceda_markup.markup import createMarkup
 
-class GML(object):
-    '''
-    classdocs
-    '''
+GML_NAMESPACE = 'http://www.opengis.net/gml'
+GML_PREFIX = 'gml'
+GML_ROOT_TAG = 'metadata'
 
-    NAMESPACE = 'http://www.opengis.net/gml'
-    PREFIX = 'gml'
-    ROOT_TAG = 'metadata'
+def createGML(root = None, tagName = GML_ROOT_TAG, ns = GML_NAMESPACE):      
+    '''
+        @param root: the root tag of the document containing this element
+        @param tagName: the tagName 
+        @param ns: the tag namespace       
+    '''
+    return createMarkup(tagName, GML_PREFIX, ns, root)
 
-    def __init__(self, root = None):               
-        '''
-            Constructor
-        '''
-        self._hasns = False
-        self._root = root
-        if self._root is not None:
-            self._hasns = True
-        else:
-            self._root = Element(GML.ROOT_TAG)
-            
-        self._root.set("xmlns:%s" % (GML.PREFIX), GML.NAMESPACE)        
-
-class Polygon(GML):
+def createPosList(root = None, ns = GML_NAMESPACE, body = None, srsDimension = None):      
     '''
-    classdocs
-    '''
-
-    def __init__(self, root, body):
-        '''
-        Constructor
-        @param root: the document root element where attach the prefix:namespace for this element 
-        @param body: an instance of GML.Exterior 
-        '''
-        self.body = body
-        super(Polygon, self).__init__(root)
-    
-    def buildElement(self):
-        polygon =  Element("%s:%s" % (GML.PREFIX, 'Polygon'))
-        polygon.append(self.body.buildElement())
-        return polygon
-    
-class Exterior(GML):
-    '''
-    classdocs
-    '''
-
-    def __init__(self, root, body):
-        '''
-        Constructor
-        @param root: the document root element where attach the prefix:namespace for this element 
-        @param body: an instance of GML.LinerRing 
-        '''
-        self.body = body
-        super(Exterior, self).__init__(root)
-    
-    def buildElement(self):
-        exterior =  Element("%s:%s" % (GML.PREFIX, 'exterior'))
-        exterior.append(self.body.buildElement())
-        return exterior
-    
-class LinearRing(GML):
-    '''
-    classdocs
-    '''
-
-    def __init__(self, root, body):
-        '''
-        Constructor
-        @param root: the document root element where attach the prefix:namespace for this element 
-        @param body: an instance of GML.PosList 
-        '''
-        self.body = body
-        super(LinearRing, self).__init__(root)
-    
-    def buildElement(self):
-        linearRing =  Element("%s:%s" % (GML.PREFIX, 'LinearRing'))
-        linearRing.append(self.body.buildElement())
-        return linearRing
-    
-class PosList(GML):
-    '''
-    classdocs
-    '''
-
-    def __init__(self, root, body, srsDimension = None):
-        '''
-        Constructor
-        @param root: the document root element where attach the prefix:namespace for this element 
+        @param root: the root tag of the document containing this element
+        @param ns: the tag namespace 
         @param body: a string like '45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45'
-        @param srsDimension: a number
-        '''
-        self.body = body
-        self.srsDimension = srsDimension
-        super(PosList, self).__init__(root)
+        @param srsDimension: a number        
+    '''
+    markup = createMarkup('posList', GML_PREFIX, ns, root)
+    if srsDimension is not None:  
+        markup.set('srsDimension', srsDimension)
+    if body is not None:                                
+        markup.text = body 
+    return markup
+
+def createLinearRing(root = None, ns = GML_NAMESPACE, body = None):      
+    '''
+        @param root: the root tag of the document containing this element
+        @param ns: the tag namespace 
+        @param body: an instance of GML.PosList
+    '''
+    markup = createMarkup('LinearRing', GML_PREFIX, ns, root)
+    if body is not None:
+        markup.append(body)   
+    return markup        
+
+def createExterior(root = None, ns = GML_NAMESPACE, body = None):      
+    '''
+        @param root: the root tag of the document containing this element
+        @param ns: the tag namespace 
+        @param body: an instance of GML.LinerRing
+    '''
+    markup = createMarkup('exterior', GML_PREFIX, ns, root)
+    if body is not None:
+        markup.append(body)   
+    return markup        
+
+def createPolygon(root = None, ns = GML_NAMESPACE, body = None):      
+    '''
+        @param root: the root tag of the document containing this element
+        @param ns: the tag namespace 
+        @param body: an instance of GML.Exterior
+    '''
+    markup = createMarkup('Polygon', GML_PREFIX, ns, root)
+    if body is not None:
+        markup.append(body)
+    return markup        
+     
+def createValidTime(root = None, ns = GML_NAMESPACE, body = None):      
+    '''
+        @param root: the root tag of the document containing this element        
+        @param ns: the tag namespace 
+        @param body: an instance of GML.TimePeriod        
+    '''
+    markup = createMarkup('validTime', GML_PREFIX, ns, root)
+    if body is not None:
+        markup.append(body)
+    return markup        
+
+def createTimePeriod(root = None, ns = GML_NAMESPACE, begin = None, end = None):      
+    '''
+        @param root: the root tag of the document containing this element
+        @param ns: the tag namespace 
+        @param begin: an instance of GML.BeginPosition 
+        @param end: an instance of GML.EndPosition 
+    '''
+    markup = createMarkup('TimePeriod', GML_PREFIX, ns, root)
+    if begin is not None:
+        markup.append(begin)
+    if end is not None:
+        markup.append(end) 
+    return markup        
+        
+def _createTimePositionType(itype, root = None, ns = GML_NAMESPACE, body = None):      
+    '''
+        @param itype: 'beginPosition' or endPosition    
+        @param root: the root tag of the document containing this element 
+        @param ns: the tag namespace        
+        @param body: an instance of GML.TimePeriod        
+    '''
+    markup = createMarkup(itype, GML_PREFIX, ns, root)
+    if body is not None:
+        markup.append(body)
+    return markup        
+
+def createBeginPosition(root = None, ns = GML_NAMESPACE, body = None):      
+    '''    
+        @param root: the root tag of the document containing this element
+        @param ns: the tag namespace 
+        @param body: a string
+    '''
+    markup = createMarkup('beginPosition', GML_PREFIX, ns, root)
+    if body is not None:
+        markup.text = body
+    return markup        
     
-    def buildElement(self):
-        posList =  Element("%s:%s" % (GML.PREFIX, 'posList'))
-        posList.set('srsDimension', self.srsDimension)
-        posList.text = self.body
-        return posList             
+def createEndPosition(root = None, ns = GML_NAMESPACE, body = None):      
+    '''    
+        @param root: the root tag of the document containing this element
+        @param ns: the tag namespace 
+        @param body: a string
+    '''
+    markup = createMarkup('endPosition', GML_PREFIX, ns, root)
+    if body is not None:
+        markup.text = body   
+    return markup         

@@ -30,88 +30,44 @@ Created on 25 May 2012
 
 @author: Maurizio Nagni
 '''
-from abc import abstractmethod
 from xml.etree.ElementTree import Element
+from ceda_markup.atom.atom import ATOM_NAMESPACE, ATOM_PREFIX
+from ceda_markup.markup import createMarkup
+
+'''
+classdocs
+'''
+TEXT_TYPE = 'text'
+HTML_TYPE = 'html'
+XHTML_TYPE = 'xhtml'
+TYPES = [TEXT_TYPE, HTML_TYPE, XHTML_TYPE]
+
+def _assignTypeAtribute(itype, markup, body):
+    if itype not in TYPES:
+        raise Exception("Type is not allowed")
+
+    if itype != TEXT_TYPE:
+        markup.set('type', itype)
+    if itype == HTML_TYPE or itype == TEXT_TYPE:
+        markup.text = body
+
+    if itype == XHTML_TYPE and isinstance(body, Element):
+        markup.append(body)
+    return markup    
 
 
-class Info(object):
-    '''
-    classdocs
-    '''
-    TEXT_TYPE = 'text'
-    HTML_TYPE = 'html'
-    XHTML_TYPE = 'xhtml'
-    TYPES = [TEXT_TYPE, HTML_TYPE, XHTML_TYPE]
+def createTitle(root = None, ns = ATOM_NAMESPACE, body = None, itype = TEXT_TYPE):
+    markup = createMarkup('title', ATOM_PREFIX, ns, root = root)
+    return _assignTypeAtribute(itype, markup, body)
 
-    def __init__(self, itype = TEXT_TYPE, body = ''):
-        '''
-        Constructor
-        '''
-        if itype in Info.TYPES:
-            self.type = itype
-        else:
-            raise Exception("Type is not allowed")
-        self.body = body
+def createSummary(root = None, ns = ATOM_NAMESPACE, body = None, itype = TEXT_TYPE):
+    markup = createMarkup('summary', ATOM_PREFIX, ns, root = root)
+    return _assignTypeAtribute(itype, markup, body)
 
-    def buildElement(self):
-        info = self._buildRoot()
-        if self.type != Info.TEXT_TYPE:
-            info.set('type', self.type)
-        if self.type == Info.HTML_TYPE or self.type == Info.TEXT_TYPE:
-            info.text = self.body
+def createContent(root = None, ns = ATOM_NAMESPACE, body = None, itype = TEXT_TYPE):
+    markup = createMarkup('content', ATOM_PREFIX, ns, root = root)
+    return _assignTypeAtribute(itype, markup, body)
 
-        if self.type == Info.XHTML_TYPE and isinstance(self.body, Element):
-            info.append(self.body)
-              
-        return info
-
-    @abstractmethod
-    def _buildRoot(self):
-        """
-            Build the Element root for this instance
-        """
-        pass       
-    
-class Title(Info):
-    '''
-    classdocs
-    '''
-
-    def __init__(self, type, body):
-        super(Title, self).__init__(type, body)
-        
-    def _buildRoot(self):
-        return Element('title')      
-    
-class Summary(Info):
-    '''
-    classdocs
-    '''
-
-    def __init__(self, type, body):
-        super(Summary, self).__init__(type, body)
-        
-    def _buildRoot(self):
-        return Element('summary')
-        
-class Content(Info):
-    '''
-    classdocs
-    '''
-
-    def __init__(self, type, body):
-        super(Content, self).__init__(type, body)
-        
-    def _buildRoot(self):
-        return Element('content')        
-    
-class Rights(Info):
-    '''
-    classdocs
-    '''
-
-    def __init__(self, type, body):
-        super(Rights, self).__init__(type, body)
-        
-    def _buildRoot(self):
-        return Element('rights')    
+def createRights(root = None, ns = ATOM_NAMESPACE, body = None, itype = TEXT_TYPE):
+    markup = createMarkup('rights', ATOM_PREFIX, ns, root = root)
+    return _assignTypeAtribute(itype, markup, body)

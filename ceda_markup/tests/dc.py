@@ -26,31 +26,47 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABI
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Created on 24 May 2012
+Created on 29 Jun 2012
 
-@author: Maurizio Nagni
+@author: mnagni
 '''
-from ceda_markup.markup import createMarkup
+import unittest
+from xml.etree.ElementTree import tostring, Element
+from ceda_markup.dc.dc import createDC, createDate
 
-GEORSS_NAMESPACE = 'http://www.georss.org/georss'
-GEORSS_PREFIX = 'georss'
-GEORSS_ROOT_TAG = 'metadata'
+class Test(unittest.TestCase):
 
-def createGEORSS(root = None, tagName = GEORSS_ROOT_TAG, ns = GEORSS_NAMESPACE):      
-    '''
-        @param root: the root tag of the document containing this element
-        @param tagName: the tagName 
-        @param ns: the tag namespace       
-    '''
-    return createMarkup(tagName, GEORSS_PREFIX, ns, root)
 
-def createWhere(root = None, body = None, ns = GEORSS_NAMESPACE):      
-    '''
-        @param root: the root tag of the document containing this element
-        @param body: a gml.Polygon instance (for now....)
-        @param ns: the tag namespace 
-    '''
-    where = createMarkup('where', GEORSS_PREFIX, ns, root)
-    if body is not None:
-        where.append(body)
-    return where
+    def setUp(self):
+        pass
+
+
+    def tearDown(self):
+        pass
+
+    def testDC(self):
+        dc = createDC()
+        self.assertEqual(tostring(dc), '<metadata xmlns="http://purl.org/dc/elements/1.1/" />')
+        
+        root = Element('myCustomTag')             
+        dc = createDC(root = root)
+        root.append(dc)        
+        self.assertEqual(tostring(root), '<myCustomTag xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:metadata /></myCustomTag>')
+
+    def testDate(self):
+        #gml tag as root
+        dc = createDC()
+        date = createTestDate(root = dc)
+        dc.append(date)        
+        self.assertEqual(tostring(dc), '<metadata xmlns="http://purl.org/dc/elements/1.1/">\
+<date>2007-09-02T08:31:15.664Z/2011-10-11T07:45:33.000Z</date></metadata>')
+        
+        #gml tag as SubElement of another root element
+        root = Element('myCustomTag')
+        date = createTestDate(root = root)
+        root.append(date)        
+        self.assertEqual(tostring(root), '<myCustomTag xmlns:dc="http://purl.org/dc/elements/1.1/">\
+<dc:date>2007-09-02T08:31:15.664Z/2011-10-11T07:45:33.000Z</dc:date></myCustomTag>')
+
+def createTestDate(root = None, body = '2007-09-02T08:31:15.664Z/2011-10-11T07:45:33.000Z'):         
+    return createDate(root, body)

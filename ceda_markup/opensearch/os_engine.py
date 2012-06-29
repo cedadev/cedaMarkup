@@ -70,7 +70,8 @@ class OSEngine(object):
         if response:
             kwargs['params_values'] = params_values
             queries = QueryTag.queryWithRoleRequest(mimetype, self.osRequest.query.params_model, params_values)
-            return response.generateResponse(self.osRequest.query.doSearch(**kwargs), [queries], self.osHostURL, **kwargs)
+            results = self.osRequest.query.doSearch(**kwargs)
+            return response.generateResponse(results, [queries], self.osHostURL, **kwargs)
         return None                
     
     def getDescription(self, ospath):

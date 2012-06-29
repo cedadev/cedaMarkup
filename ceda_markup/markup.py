@@ -26,31 +26,32 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABI
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Created on 24 May 2012
+Created on 29 Jun 2012
 
-@author: Maurizio Nagni
+@author: mnagni
 '''
-from ceda_markup.markup import createMarkup
-
-GEORSS_NAMESPACE = 'http://www.georss.org/georss'
-GEORSS_PREFIX = 'georss'
-GEORSS_ROOT_TAG = 'metadata'
-
-def createGEORSS(root = None, tagName = GEORSS_ROOT_TAG, ns = GEORSS_NAMESPACE):      
-    '''
-        @param root: the root tag of the document containing this element
-        @param tagName: the tagName 
-        @param ns: the tag namespace       
-    '''
-    return createMarkup(tagName, GEORSS_PREFIX, ns, root)
-
-def createWhere(root = None, body = None, ns = GEORSS_NAMESPACE):      
-    '''
-        @param root: the root tag of the document containing this element
-        @param body: a gml.Polygon instance (for now....)
-        @param ns: the tag namespace 
-    '''
-    where = createMarkup('where', GEORSS_PREFIX, ns, root)
-    if body is not None:
-        where.append(body)
-    return where
+from xml.etree.ElementTree import _ElementInterface, Element
+def createMarkup(tagName, tagPrefix, tagNamespace, root = None):
+        '''
+            Constructor
+            @param tagName: the tag name    
+            @param tagPrefix: the prefix to use for this tag
+            @param tagNamespace: the tag's namespace
+            @param root: the root Element of the document containing this element                        
+        '''
+        #attach gml namespace to the document root element
+        _tag = tagName
+        
+        if root is not None:
+            if isinstance(root, _ElementInterface): 
+                if root.get('xmlns') == tagNamespace:
+                    _tag = tagName            
+                else:
+                    root.set("xmlns:%s" % (tagPrefix), tagNamespace)
+                    if tagName is not None and tagPrefix is not None:
+                        _tag = "%s:%s" % (tagPrefix, tagName)
+                                    
+        markup = Element(_tag)
+        if root is None:
+            markup.set("xmlns", tagNamespace)
+        return markup
