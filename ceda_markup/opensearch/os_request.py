@@ -77,7 +77,11 @@ class OpenSearchRequest(object):
         self.query = query
         self.responses = responses
         self.os_syndacation_right = None
-        self.os_adult_content = True
+        
+        # should be set to True but because of 
+        # http://code.google.com/p/gdata-python-client/issues/detail?id=611
+        # we cannot (for now)
+        self.os_adult_content = '1'
 
         if os_description:
             self.os_description = os_description[:MAX_OS_DESCRIPTION_LEN]
@@ -105,7 +109,10 @@ class OpenSearchRequest(object):
             self.os_syndacation_right = os_syndacation_right            
             
         if os_adult_content and os_adult_content in ['false', 'FALSE', '0', 'no', 'NO']:
-            self.os_adult_content = False                        
+            # should be set to False but because of 
+            # http://code.google.com/p/gdata-python-client/issues/detail?id=611
+            # we cannot (for now)            
+            self.os_adult_content = '0'                        
             
         self.os_image = os_image
         self.os_language = os_language
