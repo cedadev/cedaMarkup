@@ -83,32 +83,32 @@ class OpenSearchRequest(object):
         # we cannot (for now)
         self.os_adult_content = '1'
 
-        if os_description:
+        if os_description is not None:
             self.os_description = os_description[:MAX_OS_DESCRIPTION_LEN]
         
-        if os_short_name:
+        if os_short_name is not None:
             self.os_short_name = os_short_name[:MAX_OS_SHORT_NAME_LEN]
                     
         #Should check that is an email format
-        if os_contact:        
+        if os_contact is not None:        
             self.os_contact = os_contact
          
-        if os_tags:
+        if os_tags is not None:
             self.os_tags = os_tags[:MAX_OS_TAGS_LEN]
 
-        if os_long_name:
+        if os_long_name is not None:
             self.os_long_name = os_long_name[:MAX_OS_LONG_NAME_LEN]
 
-        if os_developer:
+        if os_developer is not None:
             self.os_developer = os_developer[:MAX_OS_DEVELOPER_LEN]
 
-        if os_attribution:
+        if os_attribution is not None:
             self.os_attribution = os_attribution[:MAX_OS_ATTRIBUTION_LEN]            
             
         if os_syndacation_right and os_syndacation_right in OS_SYNDACATION_RIGHT:
             self.os_syndacation_right = os_syndacation_right            
             
-        if os_adult_content and os_adult_content in ['false', 'FALSE', '0', 'no', 'NO']:
+        if os_adult_content  is not None and os_adult_content in ['false', 'FALSE', '0', 'no', 'NO']:
             # should be set to False but because of 
             # http://code.google.com/p/gdata-python-client/issues/detail?id=611
             # we cannot (for now)            
@@ -203,27 +203,18 @@ class OpenSearchRequest(object):
         url = Element("Url")
         url.set("type", get_mimetype(response_type))
         
-        template_query = ""
-        for param in self.query.params_model:
-            term = self._assignPrefix(root, param)
-            
-            urlParam = ""
-            if param.required:             
-                urlParam = ("%s={%s}") % (param.par_name, term)
-            else:
-                urlParam = ("%s={%s?}") % (param.par_name, term)
-               
-            template_query += ("%s&") % (urlParam)            
+        template_query = self.query.createTemplateQuery(root)
+           
         query_template = ("%s%s?%s") % (ospath, response_type, template_query[:-1])
         url.set("template", query_template)
         
-        if rel and rel != URL_REL_DEFAULT:
+        if rel  is not None and rel != URL_REL_DEFAULT:
             url.set("rel", rel)
         
-        if indexOffset and indexOffset != URL_INDEX_OFFSET_DEFAULT:            
+        if indexOffset  is not None and indexOffset != URL_INDEX_OFFSET_DEFAULT:            
             url.set("indexOffset", str(indexOffset))
         
-        if pageOffset and pageOffset != URL_PAGE_OFFSET_DEFAULT:                    
+        if pageOffset  is not None and pageOffset != URL_PAGE_OFFSET_DEFAULT:                    
             url.set("pageOffset", str(pageOffset))        
         
         root.append(url) 

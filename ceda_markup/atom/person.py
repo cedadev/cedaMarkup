@@ -30,66 +30,22 @@ Created on 24 May 2012
 
 @author: Maurizio Nagni
 '''
-from xml.etree.ElementTree import SubElement, Element
-from abc import abstractmethod
+from ceda_markup.markup import createMarkup
+from ceda_markup.atom.atom import ATOM_NAMESPACE, ATOM_PREFIX
 
-class Person(object):
-    '''
-    classdocs
-    '''
+def _createPerson(markup, uri = None, email = None):
+    if uri is not None:
+        markup.set('uri', uri)        
 
-
-    def __init__(self, name, uri = None, email = None):
-        '''
-        Constructor
-        '''
-        self.name = name
-        
-        if uri:
-            self.uri = uri
-        
-        if email:
-            self.email = email        
-                
-    def buildElement(self):
-        entry = self.buildRoot()
-        
-        name = SubElement(entry, 'name')
-        name.text = self.name
-        
-        if hasattr(self, 'uri'):
-            uri = SubElement(entry, 'uri')
-            uri.text = self.uri        
-        
-        if hasattr(self, 'email'):
-            email = SubElement(entry, 'email')
-            email.text = self.email
-
-    @abstractmethod
-    def buildRoot(self):
-        """
-            Build the Element root for this instance
-        """
-        pass 
+    if email is not None:
+        markup.set('email', email)
+    return markup
     
-class Author(Person):
-    '''
-    classdocs
-    '''
 
-    def __init__(self, name, uri = None, email = None):
-        super(Author, self).__init__(name, uri, email)
-        
-    def buildRoot(self):
-        return Element('author')
-    
-class Contributor(Person):
-    '''
-    classdocs
-    '''
+def createAuthor(root = None, ns = ATOM_NAMESPACE, uri = None, email = None):
+    markup = createMarkup('author', ATOM_PREFIX, ns, root)
+    return _createPerson(markup, uri, email)
 
-    def __init__(self, name, uri = None, email = None):
-        super(Contributor, self).__init__(name, uri, email)
-        
-    def buildRoot(self):
-        return Element('author')        
+def createContributor(root = None, ns = ATOM_NAMESPACE, uri = None, email = None):
+    markup = createMarkup('contributor', ATOM_PREFIX, ns, root)
+    return _createPerson(markup, uri, email)        

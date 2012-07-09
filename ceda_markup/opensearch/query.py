@@ -49,7 +49,7 @@ class QueryTag(object):
         os_query =  Element(OpenSearchResponse.assignPrefix('Query', is_response))
         os_query.set("role", "request") 
         for param in params_model:
-            if param.par_name in params_values:
+            if param.par_name in params_values and params_values[param.par_name] is not None:
                 if param.term_name == 'searchTerms':
                     os_query.set(param.term_name, ' '.join(str(x) for x in params_values[param.par_name]))
                 else:

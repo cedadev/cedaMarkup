@@ -7,4 +7,10 @@ Fixed
 
 0.0.3
 Added GML ValidationTime
-major refactoring (not compatible with previous version)  
+major refactoring (not compatible with previous version)
+
+0.0.5
+- Fixed QueryTag.queryWithRoleRequest bug when params_values[param.par_name] == None  
+- Small refactoring removing code from os_request and creating with it in osqyery a method called createTemplateQuery
+- Refactored many "if item" to "if item is not None"
+- Rewritten atom.link and atom.person modules

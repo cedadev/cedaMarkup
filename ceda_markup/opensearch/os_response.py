@@ -80,15 +80,15 @@ class OpenSearchResponse(object):
             return tag
         
     def createDocument(self, totalResults = None, startIndex = None, itemsPerPage = None, query = None):        
-        if totalResults:
+        if totalResults is not None:
             os_totalResults =  SubElement(self._root, OpenSearchResponse.assignPrefix('totalResults'))
             os_totalResults.text = totalResults
         
-        if startIndex:
+        if startIndex is not None:
             os_startIndex =  SubElement(self._root, OpenSearchResponse.assignPrefix('startIndex'))
             os_startIndex.text = startIndex
 
-        if itemsPerPage:
+        if itemsPerPage is not None:
             os_itemsPerPage =  SubElement(self._root, OpenSearchResponse.assignPrefix('itemsPerPage'))
             os_itemsPerPage.text = itemsPerPage               
         '''

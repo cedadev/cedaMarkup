@@ -67,7 +67,7 @@ class OSEngine(object):
         for item in self.osRequest.responses:
             if item.extension == mimetype:
                 response = item
-        if response:
+        if response is not None:
             kwargs['params_values'] = params_values
             queries = QueryTag.queryWithRoleRequest(mimetype, self.osRequest.query.params_model, params_values)
             results = self.osRequest.query.doSearch(**kwargs)

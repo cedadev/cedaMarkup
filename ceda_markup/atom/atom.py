@@ -30,7 +30,7 @@ Created on 6 May 2012
 
 @author: Maurizio Nagni
 '''
-from xml.etree.ElementTree import Element, SubElement, _ElementInterface
+from xml.etree.ElementTree import SubElement
 from ceda_markup.markup import createMarkup
 
 ATOM_NAMESPACE = 'http://www.w3.org/2005/Atom'
@@ -49,11 +49,11 @@ def createDocument(iid, title, updated, subtitle = None, rights = None):
     doc_id = SubElement(top, 'id')
     doc_id.text = iid
     
-    if subtitle:
+    if subtitle is not None:
         subtitle = SubElement(top, 'subtitle')
         subtitle.text = subtitle
         
-    if rights:
+    if rights is not None:
         rights = SubElement(top, 'rights')
         rights.text = rights            
 

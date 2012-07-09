@@ -55,17 +55,17 @@ class OSQuery(object):
         """
         self.params_model = params_model
         
-        if rel and rel in URL_REL:
+        if rel  is not None and rel in URL_REL:
             self.rel = rel
         else:
             self.rel = URL_REL_DEFAULT
         
-        if indexOffset and isinstance(indexOffset, (int, long)) and indexOffset > 0:
+        if indexOffset  is not None and isinstance(indexOffset, (int, long)) and indexOffset > 0:
             self.indexOffset = indexOffset
         else:
             self.indexOffset = URL_INDEX_OFFSET_DEFAULT   
         
-        if pageOffset and isinstance(pageOffset, (int, long)) and pageOffset > 0:            
+        if pageOffset  is not None and isinstance(pageOffset, (int, long)) and pageOffset > 0:            
             self.pageOffset = pageOffset
         else:
             self.pageOffset = URL_PAGE_OFFSET_DEFAULT
@@ -74,4 +74,23 @@ class OSQuery(object):
     def doSearch(self, **kwargs):
         pass
        
-    
+    def createTemplateQuery(self, root):
+        '''
+            Creates a string to be used as parameters template list in the "description".
+            As this description is used in a OpenSearch URL tag, the root parameter is required 
+            in order to update the tag with the necessary namespaces
+            @param root: the OpenSearchRequest.ROOT_TAG tag.
+            @return: a string describing the parameters query
+        '''
+        template_query = ""
+        for param in self.query.params_model:
+            term = self._assignPrefix(root, param)
+            
+            urlParam = ""
+            if param.required:             
+                urlParam = ("%s={%s}") % (param.par_name, term)
+            else:
+                urlParam = ("%s={%s?}") % (param.par_name, term)
+               
+            template_query += ("%s&") % (urlParam)
+        return template_query 

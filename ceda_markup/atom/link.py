@@ -30,70 +30,47 @@ Created on 22 May 2012
 
 @author: Maurizio Nagni
 '''
-from xml.etree.ElementTree import Element
+from ceda_markup.atom.atom import ATOM_ROOT_TAG, ATOM_NAMESPACE, ATOM_PREFIX
+from ceda_markup.markup import createMarkup
 
-class Link(object):
+REL_ALTERNATE = 'alternate'
+REL_ENCLOSURE = 'enclosure'    
+REL_RELATED = 'related'    
+REL_SELF = 'self'    
+REL_VIA = 'via'    
+REL_SEARCH = 'search'
+REL_FIRST = 'first'    
+REL_NEXT = 'next'    
+REL_LAST = 'last'
+REL = [REL_ALTERNATE, REL_ENCLOSURE, REL_RELATED, REL_SELF, REL_VIA, REL_SEARCH, REL_FIRST, REL_NEXT, REL_LAST]
+
+def createLink(href, root = None, ns = ATOM_NAMESPACE, rel = None, itype = None, hreflang = None, title = None, length = None):
+          
     '''
-    classdocs
-    '''
-
-    REL_ALTERNATE = 'alternate'
-    REL_ENCLOSURE = 'enclosure'    
-    REL_RELATED = 'related'    
-    REL_SELF = 'self'    
-    REL_VIA = 'via'    
-    REL_SEARCH = 'search'
-    REL_FIRST = 'first'    
-    REL_NEXT = 'next'    
-    REL_LAST = 'last'    
-    REL = [REL_ALTERNATE, REL_ENCLOSURE, REL_RELATED, REL_SELF, REL_VIA, REL_SEARCH, REL_FIRST, REL_NEXT, REL_LAST]    
-    
-
-    def __init__(self, href, rel = None, type = None, hreflang = None, title = None, length = None):
-        '''
-        Constructor
-        @param root: the document root element where attach the prefix:namespace for this element 
-        @param href: 
+        @param href:    
+        @param root: the document root element where attach the prefix:namespace for this element  
         @param rel: one of the Link.REL constants
         @param type: 
         @param hreflang:
         @param title: an atom.Title instance
-        @param length: length of the resource in bytes    
-        '''
-        self.href = href
+        @param length: length of the resource in bytes       
+    '''
+    markup = createMarkup('link', ATOM_PREFIX, ns, root)    
+    markup.set('href', href)
+    
+    if rel is not None:
+        markup.set('rel', rel)            
         
-        if rel and rel in Link.REL:
-            self.rel = rel
-            
-        if type:
-            self.type = type            
-        
-        if hreflang:
-            self.hreflang = hreflang        
-            
-        if title:
-            self.title = title            
-        
-        if length:
-            self.length = length    
-            
-    def buildElement(self):
-        link = Element("link")        
-        link.set('href', self.href)
-                
-        if hasattr(self, 'rel'):
-            link.set('rel', self.rel)            
-        
-        if hasattr(self, 'type'):
-            link.set('type', self.type)
+    if itype is not None:
+        markup.set('type', itype)
 
-        if hasattr(self, 'hreflang'):
-            link.set('hreflang', self.hreflang)
-            
-        if hasattr(self, 'title'):
-            link.set('title', self.title)
+    if hreflang is not None:
+        markup.set('hreflang', hreflang)
+        
+    if title is not None:
+        markup.set('title', title)
 
-        if hasattr(self, 'length'):
-            link.set('length', self.length)                        
-
-        return link                
+    if length is not None:
+        markup.set('length', length)
+        
+    return markup

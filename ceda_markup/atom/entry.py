@@ -54,19 +54,19 @@ def createEntry(iid, title, updated, \
         markup.append(title)        
         markup.append(updated)
         
-        if author:
+        if author is not None:
             if isinstance(author, list):
                 extendElement(markup, author)
             else:
                 markup.append(author)               
                 
-        if content:
+        if content is not None:
             markup.append(content)
             
         if link is not None:
             markup.append(link)
                                             
-        if published:
+        if published is not None:
             markup.append(published)               
               
         return markup

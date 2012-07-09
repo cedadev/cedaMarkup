@@ -50,10 +50,10 @@ class OSImage(object):
         
     def buildElement(self):
         url = Element("Image")
-        if self.height and isinstance(self.height, (int, long)):
+        if self.height  is not None and isinstance(self.height, (int, long)):
             url.set("height", self.height)            
         
-        if self.width and isinstance(self.width, (int, long)):
+        if self.width  is not None and isinstance(self.width, (int, long)):
             url.set("width", self.width) 
             
         url.text = self.url
