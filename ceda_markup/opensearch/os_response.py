@@ -30,7 +30,9 @@ Created on 24 May 2012
 
 @author: Maurizio Nagni
 '''
-from xml.etree.ElementTree import SubElement, Element
+from ceda_markup.opensearch.os_request import OS_ROOT_TAG, OS_NAMESPACE,\
+    OS_PREFIX
+from ceda_markup.markup import createSimpleMarkup
 
 MAX_OS_SHORT_NAME_LEN = 16
 MAX_OS_LONG_NAME_LEN = 48
@@ -50,47 +52,36 @@ OS_ADULT_CONTENT_DEFAULT = False
 OS_INPUT_ENCODING_DEFAULT = 'UTF-8'
 OS_OUTPUT_ENCODING_DEFAULT = 'UTF-8'
 
-class OpenSearchResponse(object):
-    '''
-    classdocs
-    '''
+def createTotalResults(totalResults, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):    
+    tr = totalResults
+    if isinstance(totalResults, int):
+        tr = str(totalResults)
+    return createSimpleMarkup(tr, root, 'totalResults', ns, OS_PREFIX)
 
-    NAMESPACE = 'http://a9.com/-/spec/opensearch/1.1/'
-    PREFIX = 'os'
-    ROOT_TAG = 'OpenSearchDescription'
+def createStartIndex(startIndex, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):    
+    tr = startIndex
+    if isinstance(startIndex, int):
+        tr = str(startIndex)
+    return createSimpleMarkup(tr, root, 'startIndex', ns, OS_PREFIX)
 
-    def __init__(self, root = None):               
-        '''
-            Constructor
-        '''
-        self._hasns = False
-        self._root = root
-        if self._root is not None:
-            self._root.set("xmlns:%s" % (OpenSearchResponse.PREFIX), OpenSearchResponse.NAMESPACE)
-            self._hasns = True
-        else:
-            self._root = Element(OpenSearchResponse.ROOT_TAG)
-            self._root.set("xmlns", OpenSearchResponse.NAMESPACE)        
+def createItemsPerPage(itemsPerPage, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):    
+    tr = itemsPerPage
+    if isinstance(itemsPerPage, int):
+        tr = str(itemsPerPage)
+    return createSimpleMarkup(tr, root, 'indexPerPage', ns, OS_PREFIX)
 
-    @classmethod
-    def assignPrefix(self, tag, is_response = True):
-        if is_response:
-            return "%s:%s" % (OpenSearchResponse.PREFIX, tag)
-        else:
-            return tag
-        
-    def createDocument(self, totalResults = None, startIndex = None, itemsPerPage = None, query = None):        
-        if totalResults is not None:
-            os_totalResults =  SubElement(self._root, OpenSearchResponse.assignPrefix('totalResults'))
-            os_totalResults.text = totalResults
-        
-        if startIndex is not None:
-            os_startIndex =  SubElement(self._root, OpenSearchResponse.assignPrefix('startIndex'))
-            os_startIndex.text = startIndex
+def createOpenSearchRespose(root, totalResults = None, startIndex = None, itemsPerPage = None, queries = None):                
+    if totalResults is not None:
+        markup = createTotalResults(totalResults, root)
+        root.append(markup)            
+    
+    if startIndex is not None:
+        markup = createStartIndex(startIndex, root)
+        root.append(markup)            
+                    
+    if itemsPerPage is not None:
+        markup = createItemsPerPage(itemsPerPage, root)
+        root.append(markup)
 
-        if itemsPerPage is not None:
-            os_itemsPerPage =  SubElement(self._root, OpenSearchResponse.assignPrefix('itemsPerPage'))
-            os_itemsPerPage.text = itemsPerPage               
-        '''
-        Constructor
-        '''            
+    for query in queries:                       
+        root.append(query)

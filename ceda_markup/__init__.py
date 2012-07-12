@@ -33,6 +33,15 @@ Created on 21 Jun 2012
 
 __version__ = '0.0.6'
 
+import mimetypes
+if not mimetypes.inited:
+    mimetypes.init()
+    if not getattr(mimetypes, 'types_map').has_key('.atom'):
+        mimetypes.add_type('application/atom+xml', '.atom')
+    if not getattr(mimetypes, 'types_map').has_key('.opensearchdescription'):        
+        mimetypes.add_type('application/opensearchdescription+xml', '.opensearchdescription')
+
+
 def extendElement(element, collectionToAppend):
     '''
         Manages the extention of an xml.etree.ElementTree instance.
@@ -46,4 +55,13 @@ def extendElement(element, collectionToAppend):
         return
 
     for item in collectionToAppend:
-        getattr(element, 'append')(item)
+        getattr(element, 'append')(item)       
+
+def get_mimetype(extension):
+    """
+        Returns the mimetypes for a given file extension. 
+        For example 'xml' should return 'text/xml'
+        @param extension: the file extension 
+        @return: the associated mimetype
+    """
+    return getattr(mimetypes, 'types_map')[('.%s') % (extension)]

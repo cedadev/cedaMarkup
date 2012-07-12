@@ -33,11 +33,12 @@ Created on 29 Jun 2012
 from xml.etree.ElementTree import _ElementInterface, Element
 def createMarkup(tagName, tagPrefix, tagNamespace, root = None):
         '''
-            Constructor
+            Returns an ElementTree.Element instance
             @param tagName: the tag name    
             @param tagPrefix: the prefix to use for this tag
             @param tagNamespace: the tag's namespace
-            @param root: the root Element of the document containing this element                        
+            @param root: the root Element of the document containing this element
+            @return: a new instance                       
         '''
         #attach gml namespace to the document root element
         _tag = tagName
@@ -55,3 +56,11 @@ def createMarkup(tagName, tagPrefix, tagNamespace, root = None):
         if root is None:
             markup.set("xmlns", tagNamespace)
         return markup
+    
+def createSimpleMarkup(text, root, tagName, ns, prefix):
+    """
+        Returns a new markup filling only its 'text' attribute
+    """
+    markup = createMarkup(tagName, prefix, ns, root)
+    markup.text = text
+    return markup

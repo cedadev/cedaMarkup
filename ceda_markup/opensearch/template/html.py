@@ -30,9 +30,9 @@ Created on 5 May 2012
 
 @author: Maurizio Nagni
 '''
-from ceda_markup.template.osresponse import OSResponse
+from ceda_markup.opensearch.template.osresponse import OSEngineResponse
 
-class OSHTMLResponse(OSResponse):
+class OSHTMLResponse(OSEngineResponse):
     '''
     classdocs
     '''

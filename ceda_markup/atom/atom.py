@@ -30,65 +30,144 @@ Created on 6 May 2012
 
 @author: Maurizio Nagni
 '''
-from xml.etree.ElementTree import SubElement
-from ceda_markup.markup import createMarkup
+from ceda_markup.markup import createMarkup, createSimpleMarkup
+from ceda_markup import extendElement
 
 ATOM_NAMESPACE = 'http://www.w3.org/2005/Atom'
 ATOM_PREFIX = 'atom'
 ATOM_ROOT_TAG = 'feed'
 
-def createDocument(iid, title, updated, subtitle = None, rights = None):
-    top = createAtom()        
+def createAtomDocument(iid, title, updated, subtitle = None, rights = None):
+    '''
+        Returns an ElementTree.Element representing an Atom document    
+        @param iid: a string
+        @param title: a string
+        @param updated: a string
+        @param subtitle: a string        
+        @param rights: a string                
+        @return: a new ElementTree.Element instance        
+    '''
+    atom = createAtom()        
    
-    ititle = SubElement(top, 'title')
-    ititle.text = title
+    _id = createID(iid, atom)
+    atom.append(_id)
     
-    iupdated = SubElement(top, 'updated')
-    iupdated.text = updated              
+    _title = createTitle(title, atom)
+    atom.append(_title)
     
-    doc_id = SubElement(top, 'id')
-    doc_id.text = iid
+    _updated = createUpdated(updated, atom)
+    atom.append(_updated)
     
     if subtitle is not None:
-        subtitle = SubElement(top, 'subtitle')
-        subtitle.text = subtitle
+        _subtitle = createSubTitle(subtitle, atom)
+        atom.append(_subtitle)
         
     if rights is not None:
-        rights = SubElement(top, 'rights')
-        rights.text = rights            
-
+        _rights = createRigths(rights, atom)
+        atom.append(_rights)        
     
-    return top
+    return atom
+
+def createEntry(iid, title, updated, \
+                 author = None, content = None, link = None, \
+                 published = None, root = None, 
+                 ns = ATOM_NAMESPACE):      
+        '''
+            Constructor
+            @param iid: an atom.ID instance
+            @param title: an atom.Title instance 
+            @param updated: an atom.Update instance
+            @param author: one or more atom.Author instances
+            @param content: an atom.Content instance             
+            @param link: one or more atom.Link instances                                     
+            @param published: an atom.Published instance                          
+            @param root: the document root element where attach the prefix:namespace for this element                        
+        '''
+        markup = createMarkup('entry', ATOM_PREFIX, ns, root)        
+        markup.append(iid)                
+        markup.append(title)        
+        markup.append(updated)
+        
+        if author is not None:
+            if isinstance(author, list):
+                extendElement(markup, author)
+            else:
+                markup.append(author)               
+                
+        if content is not None:
+            markup.append(content)
+            
+        if link is not None:
+            markup.append(link)
+                                            
+        if published is not None:
+            markup.append(published)               
+              
+        return markup
 
 def createAtom(root = None, tagName = ATOM_ROOT_TAG, ns = ATOM_NAMESPACE):      
     '''
+        Returns an ElementTree.Element representing an Atom tag
         @param root: the root tag of the document containing this element
         @param tagName: the tagName 
-        @param ns: the tag namespace       
+        @param ns: the tag namespace
+        @return: a new ElementTree.Element instance     
     '''
     return createMarkup(tagName, ATOM_PREFIX, ns, root)
 
 def createID(iid, root = None, ns = ATOM_NAMESPACE):      
     '''
+        Returns an Atom.id instance as ElementTree
         @param iid: a unique identifier, eventually an URI    
         @param root: the root tag of the document containing this element 
         @param ns: the tag namespace       
+        @return: a new ElementTree.Element instance        
     '''
-    markup = createMarkup('id', ATOM_PREFIX, ns, root)        
-    markup.text = str(iid)    
-    return markup
+    return createSimpleMarkup(str(iid), root, 'id', ns, ATOM_PREFIX)    
+
+def createTitle(title, root = None, ns = ATOM_NAMESPACE):      
+    '''
+        Returns an Atom.title instance as ElementTree
+        @param title: the title's text    
+        @param root: the root tag of the document containing this element 
+        @param ns: the tag namespace       
+        @return: a new ElementTree.Element instance        
+    '''
+    return createSimpleMarkup(title, root, 'title', ns, ATOM_PREFIX)    
+
+def createSubTitle(subtitle, root = None, ns = ATOM_NAMESPACE):      
+    '''
+        Returns an Atom.subtitle instance as ElementTree
+        @param title: the title's text    
+        @param root: the root tag of the document containing this element 
+        @param ns: the tag namespace       
+        @return: a new ElementTree.Element instance        
+    '''
+    return createSimpleMarkup(str(subtitle), root, 'subtitle', ns, ATOM_PREFIX)
+
+def createRigths(rigths, root = None, ns = ATOM_NAMESPACE):      
+    '''
+        Returns an Atom.title instance as ElementTree
+        @param rigths: the rigths's text    
+        @param root: the root tag of the document containing this element 
+        @param ns: the tag namespace       
+        @return: a new ElementTree.Element instance        
+    '''
+    return createSimpleMarkup(str(rigths), root, 'rigths', ns, ATOM_PREFIX)
+
 
 def createUpdated(updated, root = None, ns = ATOM_NAMESPACE):      
     '''
+        Returns an Atom.updated instance as ElementTree
         @param updated: is a Date construct indicating the most
    recent instant in time when an entry or feed was modified in a way
    the publisher considers significant.
         @param root: the root tag of the document containing this element 
-        @param ns: the tag namespace       
+        @param ns: the tag namespace   
+        @return: a new ElementTree.Element instance            
     '''
-    markup = createMarkup('updated', ATOM_PREFIX, ns, root)        
-    markup.text = str(updated)    
-    return markup
+    return createSimpleMarkup(str(updated), root, 'updated', ns, ATOM_PREFIX)    
+
 
 def createPublished(published, root = None, ns = ATOM_NAMESPACE):      
     '''
@@ -96,11 +175,10 @@ def createPublished(published, root = None, ns = ATOM_NAMESPACE):
    instant in time associated with an event early in the life cycle of
    the entry    
         @param root: the root tag of the document containing this element 
-        @param ns: the tag namespace       
+        @param ns: the tag namespace 
+        @return: a new ElementTree.Element instance              
     '''
-    markup = createMarkup('published', ATOM_PREFIX, ns, root)        
-    markup.text = str(published)    
-    return markup
+    return createSimpleMarkup(str(published), root, 'published', ns, ATOM_PREFIX)    
 
 ATOM_LINK_REL_SELF = 'self'
 ATOM_LINK_REL_FIRST = 'first'
@@ -113,7 +191,8 @@ def createLink(iri, rel = None, itype = None, root = None, ns = ATOM_NAMESPACE):
         @param rel: a string like 'self', 'first', 'last', ... 
         @param itype: an advisory media type as 'application/atom+xml'       
         @param root: the root tag of the document containing this element 
-        @param ns: the tag namespace       
+        @param ns: the tag namespace   
+        @return: a new ElementTree.Element instance            
     '''
     markup = createMarkup('link', ATOM_PREFIX, ns, root)
     markup.set('href', iri)

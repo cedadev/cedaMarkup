@@ -30,7 +30,7 @@ Created on 22 May 2012
 
 @author: Maurizio Nagni
 '''
-from ceda_markup.atom.atom import ATOM_ROOT_TAG, ATOM_NAMESPACE, ATOM_PREFIX
+from ceda_markup.atom.atom import ATOM_NAMESPACE, ATOM_PREFIX
 from ceda_markup.markup import createMarkup
 
 REL_ALTERNATE = 'alternate'

@@ -71,26 +71,10 @@ class OSQuery(object):
             self.pageOffset = URL_PAGE_OFFSET_DEFAULT
             
     @abstractmethod
-    def doSearch(self, **kwargs):
-        pass
-       
-    def createTemplateQuery(self, root):
-        '''
-            Creates a string to be used as parameters template list in the "description".
-            As this description is used in a OpenSearch URL tag, the root parameter is required 
-            in order to update the tag with the necessary namespaces
-            @param root: the OpenSearchRequest.ROOT_TAG tag.
-            @return: a string describing the parameters query
-        '''
-        template_query = ""
-        for param in self.query.params_model:
-            term = self._assignPrefix(root, param)
-            
-            urlParam = ""
-            if param.required:             
-                urlParam = ("%s={%s}") % (param.par_name, term)
-            else:
-                urlParam = ("%s={%s?}") % (param.par_name, term)
-               
-            template_query += ("%s&") % (urlParam)
-        return template_query 
+    def doSearch(self, context):
+        """
+            Implements the search call.
+            @param context: a dictionary populated by the client containing all the necessary informations
+            @return: a list of results items 
+        """
+        pass 

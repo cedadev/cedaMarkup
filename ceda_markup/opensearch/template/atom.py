@@ -26,48 +26,20 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABI
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Created on 24 May 2012
+Created on 5 May 2012
 
 @author: Maurizio Nagni
 '''
-from ceda_markup import extendElement
-from ceda_markup.atom.atom import ATOM_NAMESPACE, ATOM_PREFIX
-from ceda_markup.markup import createMarkup
+from ceda_markup.opensearch.template.osresponse import OSEngineResponse
 
-def createEntry(iid, title, updated, \
-                 author = None, content = None, link = None, \
-                 published = None, root = None, 
-                 ns = ATOM_NAMESPACE):      
+class OSAtomResponse(OSEngineResponse):
+    '''
+    classdocs
+    '''
+
+    def __init__(self):
         '''
             Constructor
-            @param iid: an atom.ID instance
-            @param title: an atom.Title instance 
-            @param updated: an atom.Update instance
-            @param author: one or more atom.Author instances
-            @param content: an atom.Content instance             
-            @param link: one or more atom.Link instances                                     
-            @param published: an atom.Published instance                          
-            @param root: the document root element where attach the prefix:namespace for this element                        
         '''
-        markup = createMarkup('entry', ATOM_PREFIX, ns, root)        
-        markup.append(iid)                
-        markup.append(title)        
-        markup.append(updated)
-        
-        if author is not None:
-            if isinstance(author, list):
-                extendElement(markup, author)
-            else:
-                markup.append(author)               
-                
-        if content is not None:
-            markup.append(content)
-            
-        if link is not None:
-            markup.append(link)
-                                            
-        if published is not None:
-            markup.append(published)               
-              
-        return markup
-        
+        #type = "application/atom+xml"               
+        super(OSAtomResponse, self).__init__('atom')

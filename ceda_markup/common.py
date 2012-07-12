@@ -26,20 +26,16 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABI
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Created on 5 May 2012
+Created on 10 Jul 2012
 
-@author: Maurizio Nagni
+@author: mnagni
 '''
-from osresponse import OSResponse
-
-class OSAtomResponse(OSResponse):
-    '''
-    classdocs
-    '''
-
-    def __init__(self):
-        '''
-            Constructor
-        '''
-        #type = "application/atom+xml"               
-        super(OSAtomResponse, self).__init__('atom')
+import datetime
+def fromDateStringToISO(date):
+    res = None
+    try:
+        res = datetime.datetime.strptime( date, "%Y-%m-%dT%H:%M:%S%Z" )
+    except:
+        res = datetime.datetime.strptime( date, "%Y-%m-%dT%H:%M:%S" )
+    return res
+    

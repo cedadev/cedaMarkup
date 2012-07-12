@@ -30,8 +30,6 @@ Created on 22 May 2012
 
 @author: Maurizio Nagni
 '''
-from xml.etree.ElementTree import Element
-
 class OSImage(object):
     '''
     classdocs
@@ -47,14 +45,3 @@ class OSImage(object):
         self.height = height
         self.width = width
         self.type = itype
-        
-    def buildElement(self):
-        url = Element("Image")
-        if self.height  is not None and isinstance(self.height, (int, long)):
-            url.set("height", self.height)            
-        
-        if self.width  is not None and isinstance(self.width, (int, long)):
-            url.set("width", self.width) 
-            
-        url.text = self.url
-        return url

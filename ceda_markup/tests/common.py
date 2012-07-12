@@ -26,30 +26,31 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABI
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Created on 21 May 2012
+Created on 10 Jul 2012
 
-@author: Maurizio Nagni
+@author: mnagni
 '''
-from abc import abstractmethod
-
-class OSResponse(object):
-    '''
-    classdocs
-    '''
+import unittest
+from ceda_markup.date.rfc3339 import tf_from_timestamp
 
 
-    def __init__(self, extension):
-        '''
-            Constructor
-        '''        
-        self.extension = extension
-        
-    @abstractmethod
-    def generateResponse(self, result, queries, ospath, **kwargs):
-        '''
-            @param result: the value returned from a OSQuery.doSearch instance invocation
-            @param queries: the value returned by a QueryTag.queryWithRoleRequest invocation
-            @param ospath: the host URL
-            @param kwargs: a dictionary of custom parameters 
-        '''
-        pass 
+class Test(unittest.TestCase):
+
+
+    def setUp(self):
+        pass
+
+
+    def tearDown(self):
+        pass
+
+
+    def testfromDateStringToISO(self):
+        date = '2012-07-09T16:52:29'
+        tf_from_timestamp(date)
+        date = '2012-07-09T16:52:29+01:00'
+        tf_from_timestamp(date)
+
+if __name__ == "__main__":
+    #import sys;sys.argv = ['', 'Test.testfromDateStringToISO']
+    unittest.main()

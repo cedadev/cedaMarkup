@@ -30,28 +30,27 @@ Created on 24 May 2012
 
 @author: Maurizio Nagni
 '''
-from xml.etree.ElementTree import Element
-from ceda_markup.opensearch.os_response import OpenSearchResponse
+from ceda_markup.opensearch.os_request import OS_PREFIX, OS_ROOT_TAG,\
+    OS_NAMESPACE
+from ceda_markup.markup import createMarkup
 
-class QueryTag(object):
+def createQuery(mimetype, params_model, params_values, is_response = True, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     '''
-    classdocs
+        Returns an ElementTree.Element representing an OpenSearch.Query tag
+        @param mimetype:
+        @param params_model: a list of OSParam instances
+        @param params_values: a dictionary containing one value or None to pair with the params_model 
+        @param root: the root tag of the document containing this element
+        @param tagName: the tagName 
+        @param ns: the tag namespace
+        @return: a new ElementTree.Element instance     
     '''
-
-
-    def __init__(self):
-        '''
-        Constructor
-        '''       
-
-    @classmethod        
-    def queryWithRoleRequest(self, mimetype, params_model, params_values, is_response = True):
-        os_query =  Element(OpenSearchResponse.assignPrefix('Query', is_response))
-        os_query.set("role", "request") 
-        for param in params_model:
-            if param.par_name in params_values and params_values[param.par_name] is not None:
-                if param.term_name == 'searchTerms':
-                    os_query.set(param.term_name, ' '.join(str(x) for x in params_values[param.par_name]))
-                else:
-                    os_query.set(param.par_name, params_values[param.par_name])
-        return os_query        
+    markup = createMarkup('Query', OS_PREFIX, ns, root)
+    markup.set("role", "request")
+    for param in params_model:
+        if param.par_name in params_values and params_values[param.par_name] is not None:
+            if param.term_name == 'searchTerms':
+                markup.set(param.term_name, ' '.join(str(x) for x in params_values[param.par_name]))
+            else:
+                markup.set(param.par_name, params_values[param.par_name])
+    return markup       

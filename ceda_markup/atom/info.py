@@ -57,6 +57,17 @@ def _assignTypeAtribute(itype, markup, body):
 
 
 def createTitle(root = None, ns = ATOM_NAMESPACE, body = None, itype = TEXT_TYPE):
+    """
+        Creates an Atom.title element.
+        The 'body' parameter is assigned to the tag according to the 'itype' parameter;
+        itype == XHTML_TYPE ---> body must be an ElementTree.Element instance
+        itype == HTML_TYPE or TEXT_TYPE ---> body should be a text string
+        @param root: the document owning this tag
+        @param ns: the namespace associated with this tag
+        @param body: the tag content
+        @param itype: the tag content type. It accepts TEXT_TYPE, HTML_TYPE, XHTML_TYPE values
+        @return: an ElementTree.Element instance          
+    """
     markup = createMarkup('title', ATOM_PREFIX, ns, root = root)
     return _assignTypeAtribute(itype, markup, body)
 

@@ -31,9 +31,9 @@ Created on 29 Jun 2012
 @author: mnagni
 '''
 import unittest
-from ceda_markup.atom.atom import createAtom, createID, createUpdated
+from ceda_markup.atom.atom import createAtom, createID, createUpdated,\
+    createEntry, createAtomDocument
 from xml.etree.ElementTree import tostring, Element
-from ceda_markup.atom.entry import createEntry
 from ceda_markup.atom.info import createTitle
 
 
@@ -66,8 +66,7 @@ class Test(unittest.TestCase):
         iid = createID(1, root = atom)
         update = createUpdated('2012-0619T21:02:00.626Z', root = atom)
         entry = createEntry(iid, title, update, root = atom)
-        atom.append(entry) 
-        print tostring(atom)               
+        atom.append(entry)                
         self.assertEqual(tostring(atom), '<feed xmlns="http://www.w3.org/2005/Atom">\
 <entry><id>1</id><title>testEntry</title><updated>2012-0619T21:02:00.626Z</updated></entry></feed>')
         
@@ -81,3 +80,12 @@ class Test(unittest.TestCase):
 <atom:entry><atom:id>1</atom:id><atom:title>testEntry</atom:title><updated>2012-0619T21:02:00.626Z</updated>\
 </atom:entry></myCustomTag>')        
         
+        root = createAtomDocument(1, 'atomTitle', '2012-0619T21:02:00.626Z')
+        iid = createID(2, root = root)
+        title = createTitle(root = root, body = 'testEntry')
+        update = createUpdated('2012-0619T21:02:00.626Z', root = root)
+        entry = createEntry(iid, title, update, root = root)
+        root.append(entry)
+        self.assertEqual(tostring(root), '<feed xmlns="http://www.w3.org/2005/Atom"><id>1</id>\
+<title>atomTitle</title><updated>2012-0619T21:02:00.626Z</updated><entry><id>2</id>\
+<title>testEntry</title><updated>2012-0619T21:02:00.626Z</updated></entry></feed>', 'Error')
