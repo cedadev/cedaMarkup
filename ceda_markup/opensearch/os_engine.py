@@ -41,36 +41,44 @@ from xml.dom import minidom
   
 
 class OSEngine(object):
-    '''
-    classdocs
-    '''
+    """
+    - :ref:`OSQuery <ceda_markup.opensearch.osquery.OSQuery>` **osQuery**
+        an OSQuery instance
+    - :ref:`OSEngineResponse <ceda_markup.opensearch.template.osresponse.OSEngineResponse>` **osResponses**
+        a list of OSEngineResponse instances
+    - :ref:`OpenSearchDescription <ceda_markup.opensearch.os_response.OpenSearchDescription>` **osDescription**
+        an OpenSearchDescription instance                        
+    - string **ospath**
+        the URL where the OpenSearch service is hosted
+    - :ref:`OSEngineHelper <ceda_markup.opensearch.os_engine_helper.OSEngineHelper>` **osEngineHelper**
+        to write
+    """
 
-    def __init__(self, query, osEnResponses, osDescription, osEngineHelper = OSEngineHelper()):
-        '''
-        Constructor
-            @param osQuery: an OSQuery instance 
-            @param osResponses: a list of OSEngineResponse instances
-            @param osDescription: an OpenSearchDescription instance                        
-            @param ospath: the URL where the OpenSearch service is hosted
-            @param osEngineHelper: 
-        '''
-        self.osQuery = query
-        self.osEnResponses = osEnResponses
+    def __init__(self, osQuery, osResponses, osDescription, osEngineHelper = None):
+
+        self.osQuery = osQuery
+        self.osResponses = osResponses
         self.osDescription = osDescription        
         self.osEngineHelper = osEngineHelper
+        if osEngineHelper is None:
+            self.osEngineHelper = OSEngineHelper()
         self.osHostURL = 'http://localhost'             
         
     def doSearch(self, hostURL, mimetype, context):
         """
-            Executes the Opensearch call.
-            @param hostURL: the opensearch engine URL
-            @param mimetype: the desired mimetype output
-            @param context: a dictionary containing all the necessary information to exploit the request
-            @return: a response in the required mimetype or None if the mimetype is not supported   
+        Executes the Opensearch call.
+        Returns a response in the required mimetype or None if the mimetype is not supported 
+        
+        - string **hostURL** 
+            the opensearch engine URL
+        - string **mimetype** 
+            the desired mimetype output
+        - dict **context** 
+            a dictionary containing all the necessary information to exploit the request   
         """
         self.osHostURL = hostURL
         response = None
-        for item in self.osEnResponses:
+        for item in self.osResponses:
             if item.extension == mimetype:
                 response = item
         if response is not None:
@@ -81,17 +89,22 @@ class OSEngine(object):
         return None              
     
     def getDescription(self, ospath):
-        reqDoc = createOSDescription(self.osEnResponses, self.osDescription, self.osQuery, ospath)
+        """
+        Returns a string representation of the `OpenSearchDescription <http://www.opensearch.org/Specifications/OpenSearch/1.1#OpenSearch_description_document>`_ element
+        
+        - string ospath
+            The engine host URL
+        """
+        reqDoc = createOSDescription(self.osResponses, self.osDescription, self.osQuery, ospath)
         self.osEngineHelper.additionalDescription(reqDoc)
         reparsed = minidom.parseString(tostring(reqDoc))
         return reparsed.toprettyxml(indent="  ")
 
     def createQueryDictionary(self):
-        '''
-            Returns a dictionary having as keys the query parameters. This method is 
-            supposed to be used as utility to migrate the request parameters from the 
-            http request to an internal neutral (not any django QueryDict) dictionary.
-            @return: a dictionary
+        '''            
+        Returns a dictionary having as keys the query parameters. This method is 
+        supposed to be used as utility to migrate the request parameters from the 
+        http request to an internal neutral (not any django QueryDict) dictionary.
         '''        
         ret = {}
         for param in self.osQuery.params_model:
