@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>os_engine &mdash; cedaMarkup v0.0.7 documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.7',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="cedaMarkup v0.0.7 documentation" href="../../index.html" />
+    <link rel="up" title="opensearch" href="index.html" />
+    <link rel="next" title="os_query" href="os_query.html" />
+    <link rel="prev" title="osresponse" href="template/osresponse.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="os_query.html" title="os_query"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="template/osresponse.html" title="osresponse"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">cedaMarkup v0.0.7 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >ceda_markup</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">opensearch</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-ceda_markup.opensearch.os_engine">
+<h1>os_engine<a class="headerlink" href="#module-ceda_markup.opensearch.os_engine" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="ceda-markup-opensearch-os-engine-osengine"></span><dl class="class">
+<dt id="ceda_markup.opensearch.os_engine.OSEngine">
+<em class="property">class </em><tt class="descclassname">ceda_markup.opensearch.os_engine.</tt><tt class="descname">OSEngine</tt><big>(</big><em>osQuery</em>, <em>osResponses</em>, <em>osDescription</em>, <em>osEngineHelper=None</em><big>)</big><a class="headerlink" href="#ceda_markup.opensearch.os_engine.OSEngine" title="Permalink to this definition">¶</a></dt>
+<dd><ul>
+<li><dl class="first docutils">
+<dt><a class="reference external" href="os_query.html#ceda-markup-opensearch-osquery-osquery"><em>OSQuery</em></a> <strong>osQuery</strong></dt>
+<dd><p class="first last">an OSQuery instance</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><a class="reference external" href="template/osresponse.html#ceda-markup-opensearch-template-osresponse-osengineresponse"><em>OSEngineResponse</em></a> <strong>osResponses</strong></dt>
+<dd><p class="first last">a list of OSEngineResponse instances</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><a class="reference external" href="os_request.html#ceda-markup-opensearch-os-response-opensearchdescription"><em>OpenSearchDescription</em></a> <strong>osDescription</strong></dt>
+<dd><p class="first last">an OpenSearchDescription instance</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>string <strong>ospath</strong></dt>
+<dd><p class="first last">the URL where the OpenSearch service is hosted</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><a class="reference external" href="os_engine_helper.html#ceda-markup-opensearch-os-engine-helper-osenginehelper"><em>OSEngineHelper</em></a> <strong>osEngineHelper</strong></dt>
+<dd><p class="first last">to write</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="method">
+<dt id="ceda_markup.opensearch.os_engine.OSEngine.createQueryDictionary">
+<tt class="descname">createQueryDictionary</tt><big>(</big><big>)</big><a class="headerlink" href="#ceda_markup.opensearch.os_engine.OSEngine.createQueryDictionary" title="Permalink to this definition">¶</a></dt>
+<dd>Returns a dictionary having as keys the query parameters. This method is 
+supposed to be used as utility to migrate the request parameters from the 
+http request to an internal neutral (not any django QueryDict) dictionary.</dd></dl>
+
+<dl class="method">
+<dt id="ceda_markup.opensearch.os_engine.OSEngine.doSearch">
+<tt class="descname">doSearch</tt><big>(</big><em>hostURL</em>, <em>mimetype</em>, <em>context</em><big>)</big><a class="headerlink" href="#ceda_markup.opensearch.os_engine.OSEngine.doSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the Opensearch call.
+Returns a response in the required mimetype or None if the mimetype is not supported</p>
+<ul>
+<li><dl class="first docutils">
+<dt>string <strong>hostURL</strong> </dt>
+<dd><p class="first last">the opensearch engine URL</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>string <strong>mimetype</strong> </dt>
+<dd><p class="first last">the desired mimetype output</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dict <strong>context</strong> </dt>
+<dd><p class="first last">a dictionary containing all the necessary information to exploit the request</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="ceda_markup.opensearch.os_engine.OSEngine.getDescription">
+<tt class="descname">getDescription</tt><big>(</big><em>ospath</em><big>)</big><a class="headerlink" href="#ceda_markup.opensearch.os_engine.OSEngine.getDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string representation of the <a class="reference external" href="http://www.opensearch.org/Specifications/OpenSearch/1.1#OpenSearch_description_document">OpenSearchDescription</a> element</p>
+<ul>
+<li><dl class="first docutils">
+<dt>string ospath</dt>
+<dd><p class="first last">The engine host URL</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<ul class="simple">
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="template/osresponse.html"
+                                  title="previous chapter">osresponse</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="os_query.html"
+                                  title="next chapter">os_query</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../../_sources/ceda_markup/opensearch/os_engine.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="os_query.html" title="os_query"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="template/osresponse.html" title="osresponse"
+             >previous</a> |</li>
+        <li><a href="../../index.html">cedaMarkup v0.0.7 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >ceda_markup</a> &raquo;</li>
+          <li><a href="index.html" >opensearch</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2012, Maurizio Nagni.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+    </div>
+  </body>
+</html>
