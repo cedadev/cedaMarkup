@@ -37,18 +37,9 @@ from xml.etree.ElementTree import tostring, Element
 from ceda_markup.atom.info import createTitle
 
 
-class Test(unittest.TestCase):
+class AtomTest(unittest.TestCase):
 
-
-    def setUp(self):
-        pass
-
-
-    def tearDown(self):
-        pass
-
-
-    def testAtom(self):
+    def atom_test(self):
         #atom tag as root
         atom = createAtom()        
         self.assertEqual(tostring(atom), '<feed xmlns="http://www.w3.org/2005/Atom" />')
@@ -60,7 +51,7 @@ class Test(unittest.TestCase):
         self.assertEqual(tostring(root), '<myCustomTag xmlns:atom="http://www.w3.org/2005/Atom">\
 <atom:feed /></myCustomTag>')
         
-    def testEntry(self):
+    def entry_test(self):
         atom = createAtom()
         title = createTitle(root = atom, body = 'testEntry')
         iid = createID(1, root = atom)

@@ -37,18 +37,9 @@ from ceda_markup.gml.gml import createGML, createPosList, createLinearRing,\
     createTimePeriod, createValidTime
 
 
-class Test(unittest.TestCase):
+class GmlTest(unittest.TestCase):
 
-
-    def setUp(self):
-        pass
-
-
-    def tearDown(self):
-        pass
-
-
-    def testGML(self):
+    def gml_test(self):
         #gml tag as root
         gml = createGML()        
         self.assertEqual(tostring(gml), '<metadata xmlns="http://www.opengis.net/gml" />')
@@ -60,143 +51,143 @@ class Test(unittest.TestCase):
         self.assertEqual(tostring(root), '<myCustomTag xmlns:gml="http://www.opengis.net/gml"><gml:metadata />\
 </myCustomTag>')
 
-    def testPosList(self):   
-        postList = createTestPosList()         
+    def pos_list_test(self):   
+        postList = create_test_pos_list()         
         self.assertEqual(tostring(postList), '<posList xmlns="http://www.opengis.net/gml">\
 45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</posList>')
         
         root = Element('myCustomTag')
-        postList = createTestPosList(root)
+        postList = create_test_pos_list(root)
         root.append(postList)        
         self.assertEqual(tostring(root), '<myCustomTag xmlns:gml="http://www.opengis.net/gml">\
 <gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</gml:posList></myCustomTag>')
         
-    def testLineraRing(self):
+    def linear_ring(self):
         root = createGML()
-        linearRing = createTestLinearRing(root)
+        linearRing = create_test_linear_ring(root)
         root.append(linearRing)
         self.assertEqual(tostring(root), '<metadata xmlns="http://www.opengis.net/gml">\
 <LinearRing><posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</posList></LinearRing></metadata>')
         
         root = Element('myCustomTag')
-        linearRing = createTestLinearRing(root)
+        linearRing = create_test_linear_ring(root)
         root.append(linearRing)                
         self.assertEqual(tostring(root), '<myCustomTag xmlns:gml="http://www.opengis.net/gml">\
 <gml:LinearRing><gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</gml:posList>\
 </gml:LinearRing></myCustomTag>')
         
-    def testExterior(self):
+    def exterior_test(self):
         iroot = createGML()
-        exterior = createTestExterior(iroot)
+        exterior = create_test_exterior(iroot)
         iroot.append(exterior) 
         self.assertEqual(tostring(iroot), '<metadata xmlns="http://www.opengis.net/gml"><exterior>\
 <LinearRing><posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</posList></LinearRing></exterior></metadata>')
         
         iroot = Element('myCustomTag')
-        exterior = createTestExterior(iroot)
+        exterior = create_test_exterior(iroot)
         iroot.append(exterior)                        
         self.assertEqual(tostring(iroot), '<myCustomTag xmlns:gml="http://www.opengis.net/gml">\
 <gml:exterior><gml:LinearRing><gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</gml:posList>\
 </gml:LinearRing></gml:exterior></myCustomTag>')        
         
-    def testPolygon(self):
+    def polygon_test(self):
         root = createGML()
-        polygon = createTestPolygon(root = root)
+        polygon = create_test_polygon(root = root)
         root.append(polygon)         
         self.assertEqual(tostring(root), '<metadata xmlns="http://www.opengis.net/gml"><Polygon><exterior>\
 <LinearRing><posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</posList></LinearRing></exterior></Polygon></metadata>')
         
         root = Element('myCustomTag')
-        polygon = createTestPolygon(root)
+        polygon = create_test_polygon(root)
         root.append(polygon)                 
         self.assertEqual(tostring(root), '<myCustomTag xmlns:gml="http://www.opengis.net/gml"><gml:Polygon><gml:exterior>\
 <gml:LinearRing><gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</gml:posList></gml:LinearRing>\
 </gml:exterior></gml:Polygon></myCustomTag>')        
         
-    def testBeginPosition(self):                
+    def begin_position_test(self):                
         root = createGML()
-        bp = createTestBeginPosition(root)
+        bp = create_test_begin_position(root)
         root.append(bp)         
         self.assertEqual(tostring(root), '<metadata xmlns="http://www.opengis.net/gml"><beginPosition>2011-03-20T12:31:15.451Z</beginPosition></metadata>')        
                 
         root = Element('myCustomTag')
-        bp = createTestBeginPosition(root)
+        bp = create_test_begin_position(root)
         root.append(bp)         
         self.assertEqual(tostring(root), '<myCustomTag xmlns:gml="http://www.opengis.net/gml"><gml:beginPosition>2011-03-20T12:31:15.451Z</gml:beginPosition></myCustomTag>')                
                 
-    def testEndPosition(self):                
+    def end_position_test(self):                
         root = createGML()
-        bp = createTestEndPosition(root)
+        bp = create_test_end_position(root)
         root.append(bp)         
         self.assertEqual(tostring(root), '<metadata xmlns="http://www.opengis.net/gml"><endPosition>2011-03-20T12:31:15.451Z</endPosition></metadata>')        
                 
         root = Element('myCustomTag')
-        bp = createTestEndPosition(root)
+        bp = create_test_end_position(root)
         root.append(bp)         
         self.assertEqual(tostring(root), '<myCustomTag xmlns:gml="http://www.opengis.net/gml"><gml:endPosition>2011-03-20T12:31:15.451Z</gml:endPosition></myCustomTag>')                
                 
-    def testTimePeriod(self):                
+    def time_period_test(self):                
         root = createGML()
-        tp = createTestTimePeriod(root)
+        tp = create_test_time_period(root)
         root.append(tp)                         
         self.assertEqual(tostring(root), '<metadata xmlns="http://www.opengis.net/gml"><TimePeriod>\
 <beginPosition>2011-03-20T12:31:15.451Z</beginPosition><endPosition>2011-03-20T12:31:15.451Z</endPosition>\
 </TimePeriod></metadata>')        
                 
         root = Element('myCustomTag')
-        tp = createTestTimePeriod(root)
+        tp = create_test_time_period(root)
         root.append(tp)         
         self.assertEqual(tostring(root), '<myCustomTag xmlns:gml="http://www.opengis.net/gml"><gml:TimePeriod>\
 <gml:beginPosition>2011-03-20T12:31:15.451Z</gml:beginPosition><gml:endPosition>2011-03-20T12:31:15.451Z</gml:endPosition>\
 </gml:TimePeriod></myCustomTag>')     
         
-    def testValidTime(self):
+    def valid_time_test(self):
         root = createGML()
-        vt = createTestValidTime(root)
+        vt = create_test_valid_time(root)
         root.append(vt)                 
         self.assertEqual(tostring(root), '<metadata xmlns="http://www.opengis.net/gml"><validTime>\
 <TimePeriod><beginPosition>2011-03-20T12:31:15.451Z</beginPosition><endPosition>2011-03-20T12:31:15.451Z</endPosition>\
 </TimePeriod></validTime></metadata>')        
                 
         root = Element('myCustomTag')
-        vt = createTestValidTime(root)
+        vt = create_test_valid_time(root)
         root.append(vt)         
         self.assertEqual(tostring(root), '<myCustomTag xmlns:gml="http://www.opengis.net/gml"><gml:validTime>\
 <gml:TimePeriod><gml:beginPosition>2011-03-20T12:31:15.451Z</gml:beginPosition>\
 <gml:endPosition>2011-03-20T12:31:15.451Z</gml:endPosition></gml:TimePeriod></gml:validTime></myCustomTag>')                 
                 
-def createTestPosList(root = None, body = '45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45'):
+def create_test_pos_list(root = None, body = '45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45'):
     return createPosList(root, body = body)
 
-def createTestLinearRing(root = None, body = None):
+def create_test_linear_ring(root = None, body = None):
     if body == None:
-        return createLinearRing(root, body = createTestPosList(root))
+        return createLinearRing(root, body = create_test_pos_list(root))
     return createLinearRing(root, body = body)
 
-def createTestExterior(root = None, body = None):
+def create_test_exterior(root = None, body = None):
     if body == None:        
-        return createExterior(root, body = createTestLinearRing(root))         
+        return createExterior(root, body = create_test_linear_ring(root))         
     return createExterior(root, body)
 
-def createTestPolygon(root = None, body = None):
+def create_test_polygon(root = None, body = None):
     if body == None:        
-        return createPolygon(root, body = createTestExterior(root))         
+        return createPolygon(root, body = create_test_exterior(root))         
     return createPolygon(root, body = body)
 
-def createTestBeginPosition(root = None, body = '2011-03-20T12:31:15.451Z'):
+def create_test_begin_position(root = None, body = '2011-03-20T12:31:15.451Z'):
     return createBeginPosition(root, body = body)
 
-def createTestEndPosition(root = None, body = '2011-03-20T12:31:15.451Z'):
+def create_test_end_position(root = None, body = '2011-03-20T12:31:15.451Z'):
     return createEndPosition(root, body = body)    
 
-def createTestTimePeriod(root = None, begin = None, end = None):  
+def create_test_time_period(root = None, begin = None, end = None):  
     if begin == None or end == None:
-        begin = createTestBeginPosition(root)        
-        end = createTestEndPosition(root)            
+        begin = create_test_begin_position(root)        
+        end = create_test_end_position(root)            
         return createTimePeriod(root, begin = begin, end = end)         
     return createTimePeriod(root, begin = begin, end = end)  
 
-def createTestValidTime(root = None, body = None):
+def create_test_valid_time(root = None, body = None):
     if body == None:        
-        return createValidTime(root, body = createTestTimePeriod(root))         
+        return createValidTime(root, body = create_test_time_period(root))         
     return createValidTime(root, body = body)  

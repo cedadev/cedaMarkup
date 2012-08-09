@@ -34,23 +34,10 @@ import unittest
 from ceda_markup.date.rfc3339 import tf_from_timestamp
 
 
-class Test(unittest.TestCase):
-
-
-    def setUp(self):
-        pass
-
-
-    def tearDown(self):
-        pass
-
+class CommonTest(unittest.TestCase):
 
     def testfromDateStringToISO(self):
         date = '2012-07-09T16:52:29'
         tf_from_timestamp(date)
         date = '2012-07-09T16:52:29+01:00'
         tf_from_timestamp(date)
-
-if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testfromDateStringToISO']
-    unittest.main()

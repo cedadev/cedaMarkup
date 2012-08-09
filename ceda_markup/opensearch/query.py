@@ -34,7 +34,7 @@ from ceda_markup.opensearch.os_request import OS_PREFIX, OS_ROOT_TAG,\
     OS_NAMESPACE
 from ceda_markup.markup import createMarkup
 
-def createQuery(mimetype, params_model, params_values, is_response = True, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_query(mimetype, params_model, params_values, is_response = True, root = None, tag_name = OS_ROOT_TAG, ns = OS_NAMESPACE):
     '''
         Returns an ElementTree.Element representing an OpenSearch.Query tag
         @param mimetype:

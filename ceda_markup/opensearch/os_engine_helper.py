@@ -41,10 +41,10 @@ class OSEngineHelper(object):
         Constructor
         '''
     
-    def additionalDescription(self, reqDoc):
+    def additional_description(self, req_doc):
         """
             The developer should override this method to add into reqDoc further tags to the OpenSource standard ones
-            @param reqDoc: a request OpenSource document 
+            @param req_doc: a request OpenSource document 
         """        
-        return reqDoc
+        return req_doc
         

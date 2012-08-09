@@ -31,6 +31,15 @@ Created on 5 May 2012
 @author: Maurizio Nagni
 '''
 from ceda_markup.opensearch.template.osresponse import OSEngineResponse
+from ceda_markup.opensearch import create_autodiscovery_link,\
+    generate_autodiscovery_path
+from ceda_markup.atom.link import REL_SEARCH, REL_SELF, REL_FIRST, REL_NEXT,\
+    REL_LAST
+from ceda_markup.atom.atom import createAtomDocument
+from ceda_markup.opensearch.os_response import createOpenSearchRespose
+from xml.dom import minidom
+from xml.etree.ElementTree import tostring
+from abc import abstractmethod
 
 class OSAtomResponse(OSEngineResponse):
     '''
@@ -43,3 +52,56 @@ class OSAtomResponse(OSEngineResponse):
         '''
         #type = "application/atom+xml"               
         super(OSAtomResponse, self).__init__('atom')
+
+
+    def generate_response(self, results, queries, osHostURL, context):
+        ospath = generate_autodiscovery_path(osHostURL, None, self.extension, rel = None)
+        
+        #Generates the ATOM document
+        atomdoc = createAtomDocument(ospath + "atom", results.title, results.updated)
+
+        #Generate feed's links
+        self._generate_feed_links(atomdoc, ospath, results)
+        
+        #Inserts the OpenSearchResponse elements
+        createOpenSearchRespose(atomdoc, results.totalResult, results.startIndex, results.count, queries)
+        
+        self.generateEntries(atomdoc, results.subresult, ospath)
+        
+        reparsed = minidom.parseString(tostring(atomdoc))
+        return reparsed.toprettyxml(indent="  ")
+    
+    @abstractmethod
+    def generate_entries(self, atomroot, subresults, path):
+        pass
+    
+        
+    def _generate_feed_links(self, atomroot, path, result, linkid = None):
+        '''
+        Appends a number of atom <links> tags  
+        '''
+        atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
+                                                linkid, start_index = None, rel = REL_SEARCH))        
+        atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
+                                                linkid, start_index = result.startIndex, \
+                                                rel = REL_SELF))        
+        atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
+                                                linkid, \
+                                                start_index = 1, rel = REL_FIRST))
+        
+        if result.totalResult > result.startIndex + result.count:
+            atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
+                                                    linkid, \
+                                                    start_index = result.startIndex + result.count, \
+                                                    rel = REL_NEXT))     
+        else:
+            atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
+                                                    linkid, \
+                                                    start_index = result.startIndex, \
+                                                    rel = REL_NEXT))
+            
+        last_index = (result.totalResult -  result.startIndex) % result.count
+        atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
+                                                    linkid, \
+                                                    start_index = result.totalResult - last_index, \
+                                                    rel = REL_LAST))

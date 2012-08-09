@@ -33,18 +33,12 @@ Created on 29 Jun 2012
 import unittest
 from xml.etree.ElementTree import tostring, Element
 from ceda_markup.georss.georss import createGEORSS, createWhere
-from ceda_markup.tests.gml import createPolygon, createTestPolygon
+from ceda_markup.tests.gml import create_test_polygon
 
 
-class Test(unittest.TestCase):
+class GeoRSSTest(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-    def testGEORSS(self):
+    def georss_test(self):
         #georss tag as root
         root = createGEORSS()                
         self.assertEqual(tostring(root), '<metadata xmlns="http://www.georss.org/georss" />')
@@ -55,9 +49,9 @@ class Test(unittest.TestCase):
         root.append(georss)        
         self.assertEqual(tostring(root), '<myCustomTag xmlns:georss="http://www.georss.org/georss"><georss:metadata /></myCustomTag>')
         
-    def testWhere(self):
+    def where_test(self):
         root = createGEORSS() 
-        where = createWhere(root, body = createTestPolygon(root))
+        where = createWhere(root, body = create_test_polygon(root))
         root.append(where)             
         self.assertEqual(tostring(root), '<metadata xmlns="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml">\
 <where><gml:Polygon><gml:exterior><gml:LinearRing>\
@@ -65,7 +59,7 @@ class Test(unittest.TestCase):
 </gml:LinearRing></gml:exterior></gml:Polygon></where></metadata>')
         
         root = Element('myCustomTag')
-        georss = createWhere(root, body = createTestPolygon(root))
+        georss = createWhere(root, body = create_test_polygon(root))
         root.append(georss)        
         self.assertEqual(tostring(root), '<myCustomTag xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml">\
 <georss:where><gml:Polygon><gml:exterior><gml:LinearRing>\

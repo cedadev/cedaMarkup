@@ -33,8 +33,8 @@ Created on 24 May 2012
 
 
 from os_engine_helper import OSEngineHelper
-from ceda_markup.opensearch.query import createQuery
-from ceda_markup.opensearch.os_request import createOSDescription
+from ceda_markup.opensearch.query import create_query
+from ceda_markup.opensearch.os_request import create_osdescription
 from xml.etree.ElementTree import tostring
 from xml.dom import minidom
 
@@ -42,71 +42,71 @@ from xml.dom import minidom
 
 class OSEngine(object):
     """
-    - :ref:`OSQuery <ceda_markup.opensearch.osquery.OSQuery>` **osQuery**
+    - :ref:`OSQuery <ceda_markup.opensearch.osquery.OSQuery>` **os_query**
         an OSQuery instance
-    - :ref:`OSEngineResponse <ceda_markup.opensearch.template.osresponse.OSEngineResponse>` **osResponses**
+    - :ref:`OSEngineResponse <ceda_markup.opensearch.template.osresponse.OSEngineResponse>` **os_responses**
         a list of OSEngineResponse instances
-    - :ref:`OpenSearchDescription <ceda_markup.opensearch.os_response.OpenSearchDescription>` **osDescription**
+    - :ref:`OpenSearchDescription <ceda_markup.opensearch.os_response.OpenSearchDescription>` **os_description**
         an OpenSearchDescription instance                        
     - string **ospath**
         the URL where the OpenSearch service is hosted
-    - :ref:`OSEngineHelper <ceda_markup.opensearch.os_engine_helper.OSEngineHelper>` **osEngineHelper**
+    - :ref:`OSEngineHelper <ceda_markup.opensearch.os_engine_helper.OSEngineHelper>` **os_engine_helper**
         to write
     """
 
-    def __init__(self, osQuery, osResponses, osDescription, osEngineHelper = None):
+    def __init__(self, os_query, os_responses, os_description, os_engine_helper = None):
 
-        self.osQuery = osQuery
-        self.osResponses = osResponses
-        self.osDescription = osDescription        
-        self.osEngineHelper = osEngineHelper
-        if osEngineHelper is None:
-            self.osEngineHelper = OSEngineHelper()
-        self.osHostURL = 'http://localhost'             
+        self.os_query = os_query
+        self.os_responses = os_responses
+        self.os_description = os_description        
+        self.os_engine_helper = os_engine_helper
+        if os_engine_helper is None:
+            self.os_engine_helper = OSEngineHelper()
+        self.os_host_url = 'http://localhost'             
         
-    def doSearch(self, hostURL, mimetype, context):
+    def do_search(self, host_url, mimetype, context):
         """
         Executes the Opensearch call.
         Returns a response in the required mimetype or None if the mimetype is not supported 
         
-        - string **hostURL** 
+        - string **os_host_url** 
             the opensearch engine URL
         - string **mimetype** 
             the desired mimetype output
         - dict **context** 
             a dictionary containing all the necessary information to exploit the request   
         """
-        self.osHostURL = hostURL
+        self.os_host_url = host_url
         response = None
-        for item in self.osResponses:
+        for item in self.os_responses:
             if item.extension == mimetype:
                 response = item
         if response is not None:
-            queries = createQuery(mimetype, self.osQuery.params_model, context)
-            result = self.osQuery.doSearch(context)
-            packagedResults = response.digestSearchResults(result, context)
-            return response.generateResponse(packagedResults, [queries], self.osHostURL, context)
+            queries = create_query(mimetype, self.os_query.params_model, context)
+            result = self.os_query.do_search(context)
+            packaged_results = response.digest_search_results(result, context)
+            return response.generate_response(packaged_results, [queries], self.os_host_url, context)
         return None              
     
-    def getDescription(self, ospath):
+    def get_description(self, ospath):
         """
         Returns a string representation of the `OpenSearchDescription <http://www.opensearch.org/Specifications/OpenSearch/1.1#OpenSearch_description_document>`_ element
         
         - string ospath
             The engine host URL
         """
-        reqDoc = createOSDescription(self.osResponses, self.osDescription, self.osQuery, ospath)
-        self.osEngineHelper.additionalDescription(reqDoc)
-        reparsed = minidom.parseString(tostring(reqDoc))
+        req_doc = create_osdescription(self.os_responses, self.os_description, self.os_query, ospath)
+        self.os_engine_helper.additional_description(req_doc)
+        reparsed = minidom.parseString(tostring(req_doc))
         return reparsed.toprettyxml(indent="  ")
 
-    def createQueryDictionary(self):
+    def create_query_dictionary(self):
         '''            
         Returns a dictionary having as keys the query parameters. This method is 
         supposed to be used as utility to migrate the request parameters from the 
         http request to an internal neutral (not any django QueryDict) dictionary.
         '''        
         ret = {}
-        for param in self.osQuery.params_model:
+        for param in self.os_query.params_model:
             ret[param.par_name] = None
         return ret 

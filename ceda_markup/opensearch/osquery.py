@@ -71,7 +71,7 @@ class OSQuery(object):
             self.pageOffset = URL_PAGE_OFFSET_DEFAULT
             
     @abstractmethod
-    def doSearch(self, context):
+    def do_search(self, context):
         """
             Implements the search call.
             @param context: a dictionary populated by the client containing all the necessary informations

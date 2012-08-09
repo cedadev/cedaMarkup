@@ -34,17 +34,9 @@ import unittest
 from xml.etree.ElementTree import tostring, Element
 from ceda_markup.dc.dc import createDC, createDate
 
-class Test(unittest.TestCase):
+class DCTest(unittest.TestCase):
 
-
-    def setUp(self):
-        pass
-
-
-    def tearDown(self):
-        pass
-
-    def testDC(self):
+    def dc_test(self):
         dc = createDC()
         self.assertEqual(tostring(dc), '<metadata xmlns="http://purl.org/dc/elements/1.1/" />')
         
@@ -53,20 +45,20 @@ class Test(unittest.TestCase):
         root.append(dc)        
         self.assertEqual(tostring(root), '<myCustomTag xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:metadata /></myCustomTag>')
 
-    def testDate(self):
+    def date_test(self):
         #gml tag as root
         dc = createDC()
-        date = createTestDate(root = dc)
+        date = create_test_date(root = dc)
         dc.append(date)        
         self.assertEqual(tostring(dc), '<metadata xmlns="http://purl.org/dc/elements/1.1/">\
 <date>2007-09-02T08:31:15.664Z/2011-10-11T07:45:33.000Z</date></metadata>')
         
         #gml tag as SubElement of another root element
         root = Element('myCustomTag')
-        date = createTestDate(root = root)
+        date = create_test_date(root = root)
         root.append(date)        
         self.assertEqual(tostring(root), '<myCustomTag xmlns:dc="http://purl.org/dc/elements/1.1/">\
 <dc:date>2007-09-02T08:31:15.664Z/2011-10-11T07:45:33.000Z</dc:date></myCustomTag>')
 
-def createTestDate(root = None, body = '2007-09-02T08:31:15.664Z/2011-10-11T07:45:33.000Z'):         
+def create_test_date(root = None, body = '2007-09-02T08:31:15.664Z/2011-10-11T07:45:33.000Z'):         
     return createDate(root, body)

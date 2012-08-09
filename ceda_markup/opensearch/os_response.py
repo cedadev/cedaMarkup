@@ -52,22 +52,22 @@ OS_ADULT_CONTENT_DEFAULT = False
 OS_INPUT_ENCODING_DEFAULT = 'UTF-8'
 OS_OUTPUT_ENCODING_DEFAULT = 'UTF-8'
 
-def createTotalResults(totalResults, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):    
-    tr = totalResults
-    if isinstance(totalResults, int):
-        tr = str(totalResults)
+def createTotalResults(total_results, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):    
+    tr = total_results
+    if isinstance(total_results, int):
+        tr = str(total_results)
     return createSimpleMarkup(tr, root, 'totalResults', ns, OS_PREFIX)
 
-def createStartIndex(startIndex, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):    
-    tr = startIndex
-    if isinstance(startIndex, int):
-        tr = str(startIndex)
+def createStartIndex(start_index, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):    
+    tr = start_index
+    if isinstance(start_index, int):
+        tr = str(start_index)
     return createSimpleMarkup(tr, root, 'startIndex', ns, OS_PREFIX)
 
-def createItemsPerPage(itemsPerPage, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):    
-    tr = itemsPerPage
-    if isinstance(itemsPerPage, int):
-        tr = str(itemsPerPage)
+def createItemsPerPage(items_per_page, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):    
+    tr = items_per_page
+    if isinstance(items_per_page, int):
+        tr = str(items_per_page)
     return createSimpleMarkup(tr, root, 'indexPerPage', ns, OS_PREFIX)
 
 def createOpenSearchRespose(root, totalResults = None, startIndex = None, itemsPerPage = None, queries = None):                

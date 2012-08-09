@@ -31,14 +31,15 @@ Created on 11 Jul 2012
 @author: mnagni
 '''
 import unittest
-from ceda_markup.opensearch import filterResults
 from ceda_markup.markup import createMarkup
 from ceda_markup.opensearch.os_request import OS_ROOT_TAG, OS_PREFIX,\
-    OS_NAMESPACE, createShortName
+    OS_NAMESPACE, create_short_name
 from xml.etree.ElementTree import tostring
+from ceda_markup.opensearch.template.osresponse import Subresult
+from ceda_markup.opensearch import filter_results
 
 
-class Test(unittest.TestCase):
+class OpensearchTest(unittest.TestCase):
 
 
     def setUp(self):
@@ -48,53 +49,51 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testFilterResults(self):                
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 0, 0, 0)
+    def filter_results_test(self):                
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 0, 0, 0)
         self.assertEqual([1,2,3,4,5,6,7,8,9,10], res, "Error")
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 3, 0, 0)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 3, 0, 0)
         self.assertEqual([1,2,3], res, "Error")        
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 3, 0, 3)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 3, 0, 3)
         self.assertEqual([7,8,9], res, "Error")        
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 3, 0, 4)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 3, 0, 4)
         self.assertEqual([10], res, "Error")        
 
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 1, 1, 1)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 1, 1, 1)
         self.assertEqual(1, res[0], "Error")
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 1, 1, 2)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 1, 1, 2)
         self.assertEqual(2, res[0], "Error")
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 1, 1, 3)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 1, 1, 3)
         self.assertEqual(3, res[0], "Error")
         
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 5, 1, 2)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 1, 2)
         self.assertEqual([6,7,8,9,10], res, "Error")        
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 5, 1, 3)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 1, 3)
         self.assertEqual([1,2,3,4,5], res, "Error")
                 
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 5, 2, 1)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 2, 1)
         self.assertEqual([2,3,4,5,6], res, "Error")                
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 5, 2, 2)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 2, 2)
         self.assertEqual([7,8,9,10], res, "Error")
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 5, 3, 2)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 3, 2)
         self.assertEqual([8,9,10], res, "Error")
         
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 5, 6, 1)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 6, 1)
         self.assertEqual([6,7,8,9,10], res, "Error")
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 5, 6, 2)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 6, 2)
         self.assertEqual([6,7,8,9,10], res, "Error")
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 5, 7, 2)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 7, 2)
         self.assertEqual([7,8,9,10], res, "Error")
-        res = filterResults([1,2,3,4,5,6,7,8,9,10], 5, 10, 2)
+        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 10, 2)
         self.assertEqual([10], res, "Error")        
 
-    def testShortName(self):
+    def short_name_test(self):
         markup = createMarkup(OS_ROOT_TAG, OS_PREFIX, OS_NAMESPACE)
-        markup.append(createShortName("augh!",root = markup))
+        markup.append(create_short_name("augh!",root = markup))
         res = tostring(markup)
         self.assertEqual(res, '<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">\
 <ShortName>augh!</ShortName></OpenSearchDescription>', "Error")
         
-
-
-if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testFilterResults']
-    unittest.main()
+    def subresult_test(self):
+        sr = Subresult(myvar = 'ciao')
+        self.assertEquals(sr.myvar, 'ciao', "Error")

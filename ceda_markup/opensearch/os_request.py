@@ -33,8 +33,8 @@ Created on 5 May 2012
 from osquery import URL_REL_DEFAULT, URL_INDEX_OFFSET_DEFAULT,\
     URL_PAGE_OFFSET_DEFAULT
 from ceda_markup.markup import createMarkup, createSimpleMarkup
-from ceda_markup.opensearch import createTemplateQuery
 from ceda_markup import get_mimetype
+from ceda_markup.opensearch import create_template_query
 
 MAX_OS_SHORT_NAME_LEN = 16
 MAX_OS_LONG_NAME_LEN = 48
@@ -58,11 +58,11 @@ OS_NAMESPACE = 'http://a9.com/-/spec/opensearch/1.1/'
 OS_PREFIX = 'os'
 OS_ROOT_TAG = 'OpenSearchDescription'
 
-def createURL(query, response_type, ospath, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_url(query, response_type, ospath, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     markup = createMarkup('Url', OS_PREFIX, ns, root)    
     markup.set("type", get_mimetype(response_type))
     
-    template_query = createTemplateQuery(root, query)
+    template_query = create_template_query(root, query)
        
     query_template = ("%s%s?%s") % (ospath, response_type, template_query[:-1])
     markup.set("template", query_template)
@@ -77,43 +77,43 @@ def createURL(query, response_type, ospath, root = None, tagName = OS_ROOT_TAG, 
         markup.set("pageOffset", str(query.pageOffset))        
     return markup
 
-def createShortName(shortName, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
-    return createSimpleMarkup(shortName, root, 'ShortName', ns, OS_PREFIX)
+def create_short_name(short_name, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+    return createSimpleMarkup(short_name, root, 'ShortName', ns, OS_PREFIX)
 
-def createDescription(description, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_description(description, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     return createSimpleMarkup(description, root, 'Description', ns, OS_PREFIX)
 
-def createTags(tags, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_tags(tags, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     return createSimpleMarkup(tags, root, 'Tags', ns, OS_PREFIX)    
 
-def createContact(contact, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_contact(contact, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     return createSimpleMarkup(contact, root, 'Contact', ns, OS_PREFIX)
 
-def createLongName(longName, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
-    return createSimpleMarkup(longName, root, 'LongName', ns, OS_PREFIX)    
+def create_long_name(long_name, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+    return createSimpleMarkup(long_name, root, 'LongName', ns, OS_PREFIX)    
 
-def createDeveloper(developer, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_developer(developer, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     return createSimpleMarkup(developer, root, 'Developer', ns, OS_PREFIX)
 
-def createAttribution(attribution, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_attribution(attribution, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     return createSimpleMarkup(attribution, root, 'Attribution', ns, OS_PREFIX)    
 
-def createSyndacationRight(syndacation_right, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_syndacation_right(syndacation_right, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     return createSimpleMarkup(syndacation_right, root, 'SyndacationRight', ns, OS_PREFIX)
 
-def createAdultContent(adult_content, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_adult_content(adult_content, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     return createSimpleMarkup(adult_content, root, 'AdultContent', ns, OS_PREFIX)
 
-def createLanguage(language, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_language(language, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     return createSimpleMarkup(language, root, 'Language', ns, OS_PREFIX)    
 
-def createInputEncoding(inputEncoding, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
-    return createSimpleMarkup(inputEncoding, root, 'InputEncoding', ns, OS_PREFIX)
+def create_input_encoding(input_encoding, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+    return createSimpleMarkup(input_encoding, root, 'InputEncoding', ns, OS_PREFIX)
 
-def createOutputEncoding(outputEncoding, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
-    return createSimpleMarkup(outputEncoding, root, 'OutputEncoding', ns, OS_PREFIX)
+def create_output_encoding(output_encoding, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+    return createSimpleMarkup(output_encoding, root, 'OutputEncoding', ns, OS_PREFIX)
 
-def createImage(url, height = None, width = None, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_image(url, height = None, width = None, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     markup = createSimpleMarkup(url, root, 'Image', ns, OS_PREFIX)
     if height  is not None and isinstance(height, (int, long)):
         markup.set("height", height)            
@@ -123,56 +123,56 @@ def createImage(url, height = None, width = None, root = None, tagName = OS_ROOT
     return markup
     
 
-def createOSDescription(osResponses, os_description, query, ospath, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
+def create_osdescription(os_responses, os_description, query, ospath, root = None, tagName = OS_ROOT_TAG, ns = OS_NAMESPACE):
     """
         @param osResponses: a list of OSResponse instances
         @param os_description: an OpenSearchDescription instance
         @param query: an OSQuery instance        
     """
     markup = createMarkup(OS_ROOT_TAG, OS_PREFIX, ns, root)
-    markup.append(createShortName(os_description.os_short_name, root = markup))
-    markup.append(createDescription(os_description.os_description, root = markup))    
+    markup.append(create_short_name(os_description.os_short_name, root = markup))
+    markup.append(create_description(os_description.os_description, root = markup))    
 
     if hasattr(os_description, 'os_tags'):
-        markup.append(createTags(os_description.os_tags, root = markup))        
+        markup.append(create_tags(os_description.os_tags, root = markup))        
 
     if hasattr(os_description, 'os_contact'):
-        markup.append(createContact(os_description.os_contact, root = markup))
+        markup.append(create_contact(os_description.os_contact, root = markup))
     
     if hasattr(os_description, 'os_long_name'):
-        markup.append(createLongName(os_description.os_long_name, root = markup))    
+        markup.append(create_long_name(os_description.os_long_name, root = markup))    
 
     if hasattr(os_description, 'os_developer'):
-        markup.append(createDeveloper(os_description.os_developer, root = markup))        
+        markup.append(create_developer(os_description.os_developer, root = markup))        
          
     if hasattr(os_description, 'os_attribution'):
-        markup.append(createAttribution(os_description.os_attribution, root = markup))         
+        markup.append(create_attribution(os_description.os_attribution, root = markup))         
     
     if hasattr(os_description, 'os_image') and isinstance(os_description.os_image, list):
         for img in os_description.os_image:
-            markup.append(createImage(img.url, img.height, img.width, root = markup))           
+            markup.append(create_image(img.url, img.height, img.width, root = markup))           
     
     if hasattr(os_description, 'os_syndacation_right') and os_description.os_syndacation_right != OS_SYNDACATION_RIGHT_DEFAULT:
-        markup.append(createSyndacationRight(os_description.os_syndacation_right, root = markup))        
+        markup.append(create_syndacation_right(os_description.os_syndacation_right, root = markup))        
     
     if hasattr(os_description, 'os_adult_content'):
-        markup.append(createAdultContent(os_description.os_adult_content, root = markup))               
+        markup.append(create_adult_content(os_description.os_adult_content, root = markup))               
     
     if os_description.os_language and isinstance(os_description.os_language, list):        
         for item in os_description.os_language:
-            markup.append(createLanguage(item, root = markup))
+            markup.append(create_language(item, root = markup))
 
     
     if os_description.os_input_encoding and isinstance(os_description.os_input_encoding, list):
         for item in os_description.os_input_encoding:
-            markup.append(createInputEncoding(item, root = markup))     
+            markup.append(create_input_encoding(item, root = markup))     
     
     if os_description.os_output_encoding and isinstance(os_description.os_output_encoding, list):
         for item in os_description.os_output_encoding:
-            markup.append(createOutputEncoding(item, root = markup))
+            markup.append(create_output_encoding(item, root = markup))
     
-    for item in osResponses:                    
-        url = createURL(query, item.extension, ospath, root = markup)
+    for item in os_responses:                    
+        url = create_url(query, item.extension, ospath, root = markup)
         markup.append(url)
 
     return markup

@@ -46,7 +46,7 @@ class OSEngineResponse(object):
         self.extension = extension
         
     @abstractmethod
-    def generateResponse(self, result, queries, ospath, context):
+    def generate_response(self, result, queries, ospath, context):
         '''
             @param result: the output from digestSearchResults method
             @param queries: the value returned by a QueryTag.queryWithRoleRequest invocation
@@ -56,7 +56,7 @@ class OSEngineResponse(object):
         pass
     
     @abstractmethod
-    def digestSearchResults(self, results, context):
+    def digest_search_results(self, results, context):
         '''
             @param results: the value returned from a OSQuery.doSearch instance invocation
             @param queries: the value returned by a QueryTag.queryWithRoleRequest invocation
@@ -99,4 +99,6 @@ class Subresult(object):
         '''
         self.id = iid
         self.title = title
-        self.updated = updated         
+        self.updated = updated        
+        for k,v in kwargs.iteritems():
+            setattr(self, k,v)     
