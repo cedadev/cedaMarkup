@@ -32,30 +32,30 @@ Created on 29 Jun 2012
 '''
 from xml.etree.ElementTree import _ElementInterface, Element
 def createMarkup(tagName, tagPrefix, tagNamespace, root = None):
-        '''
-            Returns an ElementTree.Element instance
-            @param tagName: the tag name    
-            @param tagPrefix: the prefix to use for this tag
-            @param tagNamespace: the tag's namespace
-            @param root: the root Element of the document containing this element
-            @return: a new instance                       
-        '''
-        #attach gml namespace to the document root element
-        _tag = tagName
-        
-        if root is not None:
-            if isinstance(root, _ElementInterface): 
-                if root.get('xmlns') == tagNamespace:
-                    _tag = tagName            
-                else:
-                    root.set("xmlns:%s" % (tagPrefix), tagNamespace)
-                    if tagName is not None and tagPrefix is not None:
-                        _tag = "%s:%s" % (tagPrefix, tagName)
-                                    
-        markup = Element(_tag)
-        if root is None:
-            markup.set("xmlns", tagNamespace)
-        return markup
+    '''
+        Returns an ElementTree.Element instance
+        @param tagName: the tag name    
+        @param tagPrefix: the prefix to use for this tag
+        @param tagNamespace: the tag's namespace
+        @param root: the root Element of the document containing this element
+        @return: a new instance                       
+    '''
+    #attach gml namespace to the document root element
+    _tag = tagName
+    
+    if root is not None:
+        if isinstance(root, _ElementInterface): 
+            if root.get('xmlns') == tagNamespace:
+                _tag = tagName            
+            else:
+                root.set("xmlns:%s" % (tagPrefix), tagNamespace)
+                if tagName is not None and tagPrefix is not None:
+                    _tag = "%s:%s" % (tagPrefix, tagName)
+                                
+    markup = Element(_tag)
+    if root is None:
+        markup.set("xmlns", tagNamespace)
+    return markup
     
 def createSimpleMarkup(text, root, tagName, ns, prefix):
     """

@@ -35,7 +35,7 @@ def fromDateStringToISO(date):
     res = None
     try:
         res = datetime.datetime.strptime( date, "%Y-%m-%dT%H:%M:%S%Z" )
-    except:
+    except Exception:
         res = datetime.datetime.strptime( date, "%Y-%m-%dT%H:%M:%S" )
     return res
     

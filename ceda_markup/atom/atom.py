@@ -31,7 +31,7 @@ Created on 6 May 2012
 @author: Maurizio Nagni
 '''
 from ceda_markup.markup import createMarkup, createSimpleMarkup
-from ceda_markup import extendElement
+from ceda_markup import extend_element
 
 ATOM_NAMESPACE = 'http://www.w3.org/2005/Atom'
 ATOM_PREFIX = 'atom'
@@ -72,38 +72,38 @@ def createEntry(iid, title, updated, \
                  author = None, content = None, link = None, \
                  published = None, root = None, 
                  ns = ATOM_NAMESPACE):      
-        '''
-            Constructor
-            @param iid: an atom.ID instance
-            @param title: an atom.Title instance 
-            @param updated: an atom.Update instance
-            @param author: one or more atom.Author instances
-            @param content: an atom.Content instance             
-            @param link: one or more atom.Link instances                                     
-            @param published: an atom.Published instance                          
-            @param root: the document root element where attach the prefix:namespace for this element                        
-        '''
-        markup = createMarkup('entry', ATOM_PREFIX, ns, root)        
-        markup.append(iid)                
-        markup.append(title)        
-        markup.append(updated)
-        
-        if author is not None:
-            if isinstance(author, list):
-                extendElement(markup, author)
-            else:
-                markup.append(author)               
-                
-        if content is not None:
-            markup.append(content)
+    '''
+        Constructor
+        @param iid: an atom.ID instance
+        @param title: an atom.Title instance 
+        @param updated: an atom.Update instance
+        @param author: one or more atom.Author instances
+        @param content: an atom.Content instance             
+        @param link: one or more atom.Link instances                                     
+        @param published: an atom.Published instance                          
+        @param root: the document root element where attach the prefix:namespace for this element                        
+    '''
+    markup = createMarkup('entry', ATOM_PREFIX, ns, root)        
+    markup.append(iid)                
+    markup.append(title)        
+    markup.append(updated)
+    
+    if author is not None:
+        if isinstance(author, list):
+            extend_element(markup, author)
+        else:
+            markup.append(author)               
             
-        if link is not None:
-            markup.append(link)
-                                            
-        if published is not None:
-            markup.append(published)               
-              
-        return markup
+    if content is not None:
+        markup.append(content)
+        
+    if link is not None:
+        markup.append(link)
+                                        
+    if published is not None:
+        markup.append(published)               
+          
+    return markup
 
 def createAtom(root = None, tagName = ATOM_ROOT_TAG, ns = ATOM_NAMESPACE):      
     '''

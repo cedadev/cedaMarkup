@@ -39,10 +39,11 @@ if not mimetypes.inited:
     if not getattr(mimetypes, 'types_map').has_key('.atom'):
         mimetypes.add_type('application/atom+xml', '.atom')
     if not getattr(mimetypes, 'types_map').has_key('.opensearchdescription'):        
-        mimetypes.add_type('application/opensearchdescription+xml', '.opensearchdescription')
+        mimetypes.add_type('application/opensearchdescription+xml', \
+                           '.opensearchdescription')
 
 
-def extendElement(element, collectionToAppend):
+def extend_element(element, collection_to_append):
     '''
         Manages the extention of an xml.etree.ElementTree instance.
         As the Element.extend function has been introduced in python2.7
@@ -51,10 +52,10 @@ def extendElement(element, collectionToAppend):
         @param collectionToAppend: a collection to append to the element  
     '''    
     if hasattr(element, 'extend'):
-        getattr(element, 'extend')(collectionToAppend)
+        getattr(element, 'extend')(collection_to_append)
         return
 
-    for item in collectionToAppend:
+    for item in collection_to_append:
         getattr(element, 'append')(item)       
 
 def get_mimetype(extension):

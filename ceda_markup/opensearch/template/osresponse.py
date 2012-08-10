@@ -67,11 +67,13 @@ class OSEngineResponse(object):
      
     
 class Result(object):
-    def __init__(self, count, startIndex, startPage, totalResults, iid = None, title = "Discovery feed for Search Services", updated = datetime.now().isoformat(), subresult = []):
+    def __init__(self, count, start_index, start_page, total_results, \
+                 iid = None, title = "Discovery feed for Search Services", \
+                 updated = datetime.now().isoformat(), subresult = []):
         '''
             Constructor
             @param count: the number of search results per page desired by the search client
-            @param startIndex: the index of the first search result desired by the search client
+            @param start_index: the index of the first search result desired by the search client
             @param startPage: the page number of the set of search results desired by the search client            
             @param totalResults: the total number of results            
             @param iid: a unique identifier, eventually an URI
@@ -80,16 +82,18 @@ class Result(object):
             @param subresult: a Subresult list                       
         '''
         self.count = count
-        self.startIndex = startIndex
-        self.startPage = startPage
-        self.totalResult = totalResults
+        self.start_index = start_index
+        self.start_page = start_page
+        self.total_result = total_results
         self.id = iid
         self.title = title
         self.updated = updated
         self.subresult = subresult
         
 class Subresult(object):
-    def __init__(self, iid = None, title = "Discovery feed for Search Services", updated = datetime.now().isoformat(), **kwargs):
+    def __init__(self, iid = None, \
+                 title = "Discovery feed for Search Services", \
+                 updated = datetime.now().isoformat(), **kwargs):
         '''
             Constructor            
             @param iid: a unique identifier, eventually an URI

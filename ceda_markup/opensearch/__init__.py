@@ -7,9 +7,9 @@ def assign_prefix(root, param):
     if param.namespace is None:
         return param.term_name
     
-    for k,v in root.items():
-        if v == param.namespace:
-            return ("%s:%s") % (k[6:], param.term_name)
+    for key, value in root.items():
+        if value == param.namespace:
+            return ("%s:%s") % (key[6:], param.term_name)
     
     index = 0
     while True:
@@ -33,28 +33,35 @@ def create_template_query(root, query):
     for param in query.params_model:
         term = assign_prefix(root, param)
         
-        urlParam = ""
+        url_param = ""
         if param.required:             
-            urlParam = ("%s={%s}") % (param.par_name, term)
+            url_param = ("%s={%s}") % (param.par_name, term)
         else:
-            urlParam = ("%s={%s?}") % (param.par_name, term)
+            url_param = ("%s={%s?}") % (param.par_name, term)
            
-        template_query += ("%s&") % (urlParam)
+        template_query += ("%s&") % (url_param)
     return template_query
 
 COUNT_DEFAULT = 10
 START_INDEX_DEFAULT = 1
 START_PAGE_DEFAULT = 1
 
-def filter_results(results, count = COUNT_DEFAULT, start_index = START_INDEX_DEFAULT, start_page = START_PAGE_DEFAULT):
+def filter_results(results, count = COUNT_DEFAULT, \
+                   start_index = START_INDEX_DEFAULT, \
+                   start_page = START_PAGE_DEFAULT):
     """
         Returns the opensearch results list according to the 
         'count', 'startIndex', 'startPage' parameters
-        @param results: an instance or a list of instances to be displayed in the opensearch response
-        @param count: the number of search results per page desired by the search client
-        @param start_index: the index of the first search result desired by the search client
-        @param startPage: the page number of the set of search results desired by the search client
-        @return: the selected results or None if the results is None or is not a list or is an empty list
+        @param results: an instance or a list of instances to be displayed in 
+                        the opensearch response
+        @param count: the number of search results per page desired by 
+                        the search client
+        @param start_index: the index of the first search result desired 
+                        by the search client
+        @param startPage: the page number of the set of search results 
+                        desired by the search client
+        @return: the selected results or None if the results is None 
+                        or is not a list or is an empty list
     """
     if results is None:
         return None
@@ -77,7 +84,9 @@ def filter_results(results, count = COUNT_DEFAULT, start_index = START_INDEX_DEF
     else:
         int_start_index = START_INDEX_DEFAULT    
     
-    if start_page is not None and math.ceil((tot_res - int_start_index + 1)/float(int_count)) >= start_page:
+    if start_page is not None \
+            and math.ceil((tot_res - int_start_index + 1)/float(int_count)) \
+            >= start_page:
         int_start_page = start_page
     else:
         int_start_page = START_PAGE_DEFAULT
@@ -85,7 +94,8 @@ def filter_results(results, count = COUNT_DEFAULT, start_index = START_INDEX_DEF
     first_result = int_start_index - 1
     last_result = first_result + int_count
     
-    if int_start_page > 1 and first_result + (int_start_page - 1)*int_count <= tot_res:
+    if int_start_page > 1 \
+            and first_result + (int_start_page - 1)*int_count <= tot_res:
         first_result = first_result + (int_start_page - 1)*int_count
         
     if first_result + int_count <= tot_res:            
@@ -95,7 +105,8 @@ def filter_results(results, count = COUNT_DEFAULT, start_index = START_INDEX_DEF
 
     return _results[first_result:last_result]
 
-def generate_autodiscovery_path(path, linkid, extension, start_index = None, rel = REL_SELF):
+def generate_autodiscovery_path(path, linkid, extension, \
+                                start_index = None, rel = REL_SELF):
     """
         Assemble a path pointing to an opensearch engine 
         @param path: the host URL
@@ -128,7 +139,8 @@ def generate_autodiscovery_path(path, linkid, extension, start_index = None, rel
         return "%s%s/?startIndex=%d" % (path, extension, start_index)
 
 
-def create_autodiscovery_link(root, path, extension = None, linkid = None, start_index = 0, rel = REL_SELF):
+def create_autodiscovery_link(root, path, extension = None, linkid = None, \
+                              start_index = 0, rel = REL_SELF):
     """
         Appends an autodiscovery link to the given 'root' document 
         @param path: the host URL
@@ -137,7 +149,8 @@ def create_autodiscovery_link(root, path, extension = None, linkid = None, start
         @param startIndex: the starting index
         @param rel: a Link type identificator. If None returns a generic ID  
     """
-    href = generate_autodiscovery_path(path, linkid, extension, start_index, rel)    
+    href = generate_autodiscovery_path(path, linkid, \
+                                       extension, start_index, rel)    
     itype = get_mimetype(extension)
     if rel == ATOM_LINK_REL_SEARCH:
         itype = get_mimetype('opensearchdescription')      
