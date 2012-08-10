@@ -53,6 +53,9 @@ class OSAtomResponse(OSEngineResponse):
         #type = "application/atom+xml"               
         super(OSAtomResponse, self).__init__('atom')
 
+    @abstractmethod
+    def generate_entries(self, atomroot, subresults, path):
+        pass
 
     def generate_response(self, results, queries, osHostURL, context):
         ospath = generate_autodiscovery_path(osHostURL, None, self.extension, rel = None)
@@ -66,14 +69,10 @@ class OSAtomResponse(OSEngineResponse):
         #Inserts the OpenSearchResponse elements
         createOpenSearchRespose(atomdoc, results.totalResult, results.startIndex, results.count, queries)
         
-        self.generateEntries(atomdoc, results.subresult, ospath)
+        self.generate_entries(atomdoc, results.subresult, ospath)
         
         reparsed = minidom.parseString(tostring(atomdoc))
         return reparsed.toprettyxml(indent="  ")
-    
-    @abstractmethod
-    def generate_entries(self, atomroot, subresults, path):
-        pass
     
         
     def _generate_feed_links(self, atomroot, path, result, linkid = None):

@@ -32,7 +32,7 @@ Created on 11 Jul 2012
 '''
 import unittest
 from ceda_markup.markup import createMarkup
-from ceda_markup.opensearch.os_request import OS_ROOT_TAG, OS_PREFIX,\
+from ceda_markup.opensearch.os_request import OS_ROOT_TAG, OS_PREFIX, \
     OS_NAMESPACE, create_short_name
 from xml.etree.ElementTree import tostring
 from ceda_markup.opensearch.template.osresponse import Subresult
@@ -41,50 +41,43 @@ from ceda_markup.opensearch import filter_results
 
 class OpensearchTest(unittest.TestCase):
 
-
-    def setUp(self):
-        pass
-
-
-    def tearDown(self):
-        pass
-
-    def filter_results_test(self):                
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 0, 0, 0)
-        self.assertEqual([1,2,3,4,5,6,7,8,9,10], res, "Error")
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 3, 0, 0)
-        self.assertEqual([1,2,3], res, "Error")        
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 3, 0, 3)
-        self.assertEqual([7,8,9], res, "Error")        
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 3, 0, 4)
+    def filter_results_test(self):    
+        inititems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        res = filter_results(inititems, 0, 0, 0)
+        self.assertEqual(inititems, res, "Error")
+        res = filter_results(inititems, 3, 0, 0)
+        self.assertEqual([1, 2, 3], res, "Error")        
+        res = filter_results(inititems, 3, 0, 3)
+        self.assertEqual([7, 8, 9], res, "Error")        
+        res = filter_results(inititems, 3, 0, 4)
         self.assertEqual([10], res, "Error")        
 
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 1, 1, 1)
+        res = filter_results(inititems, 1, 1, 1)
         self.assertEqual(1, res[0], "Error")
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 1, 1, 2)
+        res = filter_results(inititems, 1, 1, 2)
         self.assertEqual(2, res[0], "Error")
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 1, 1, 3)
+        res = filter_results(inititems, 1, 1, 3)
         self.assertEqual(3, res[0], "Error")
         
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 1, 2)
-        self.assertEqual([6,7,8,9,10], res, "Error")        
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 1, 3)
-        self.assertEqual([1,2,3,4,5], res, "Error")
+        res = filter_results(inititems, 5, 1, 2)
+        self.assertEqual([6, 7, 8, 9, 10], res, "Error")        
+        res = filter_results(inititems, 5, 1, 3)
+        self.assertEqual([1, 2, 3, 4, 5], res, "Error")
                 
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 2, 1)
-        self.assertEqual([2,3,4,5,6], res, "Error")                
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 2, 2)
-        self.assertEqual([7,8,9,10], res, "Error")
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 3, 2)
-        self.assertEqual([8,9,10], res, "Error")
+        res = filter_results(inititems, 5, 2, 1)
+        self.assertEqual([2, 3, 4, 5, 6], res, "Error")                
+        res = filter_results(inititems, 5, 2, 2)
+        self.assertEqual([7, 8, 9, 10], res, "Error")
+        res = filter_results(inititems, 5, 3, 2)
+        self.assertEqual([8, 9, 10], res, "Error")
         
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 6, 1)
-        self.assertEqual([6,7,8,9,10], res, "Error")
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 6, 2)
-        self.assertEqual([6,7,8,9,10], res, "Error")
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 7, 2)
-        self.assertEqual([7,8,9,10], res, "Error")
-        res = filter_results([1,2,3,4,5,6,7,8,9,10], 5, 10, 2)
+        res = filter_results(inititems, 5, 6, 1)
+        self.assertEqual([6, 7, 8, 9, 10], res, "Error")
+        res = filter_results(inititems, 5, 6, 2)
+        self.assertEqual([6, 7, 8, 9, 10], res, "Error")
+        res = filter_results(inititems, 5, 7, 2)
+        self.assertEqual([7, 8, 9, 10], res, "Error")
+        res = filter_results(inititems, 5, 10, 2)
         self.assertEqual([10], res, "Error")        
 
     def short_name_test(self):
@@ -96,4 +89,4 @@ class OpensearchTest(unittest.TestCase):
         
     def subresult_test(self):
         sr = Subresult(myvar = 'ciao')
-        self.assertEquals(sr.myvar, 'ciao', "Error")
+        self.assertEquals(getattr(sr, 'myvar'), 'ciao', "Error")
