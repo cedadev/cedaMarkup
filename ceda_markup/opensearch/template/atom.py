@@ -67,7 +67,8 @@ class OSAtomResponse(OSEngineResponse):
         self._generate_feed_links(atomdoc, ospath, results)
         
         #Inserts the OpenSearchResponse elements
-        createOpenSearchRespose(atomdoc, results.totalResult, results.startIndex, results.count, queries)
+        createOpenSearchRespose(atomdoc, results.total_result, \
+                                results.start_index, results.count, queries)
         
         self.generate_entries(atomdoc, results.subresult, ospath)
         
@@ -82,25 +83,25 @@ class OSAtomResponse(OSEngineResponse):
         atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
                                                 linkid, start_index = None, rel = REL_SEARCH))        
         atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
-                                                linkid, start_index = result.startIndex, \
+                                                linkid, start_index = result.start_index, \
                                                 rel = REL_SELF))        
         atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
                                                 linkid, \
                                                 start_index = 1, rel = REL_FIRST))
         
-        if result.totalResult > result.startIndex + result.count:
+        if result.total_result > result.start_index + result.count:
             atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
                                                     linkid, \
-                                                    start_index = result.startIndex + result.count, \
+                                                    start_index = result.start_index + result.count, \
                                                     rel = REL_NEXT))     
         else:
             atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
                                                     linkid, \
-                                                    start_index = result.startIndex, \
+                                                    start_index = result.start_index, \
                                                     rel = REL_NEXT))
             
-        last_index = (result.totalResult -  result.startIndex) % result.count
+        last_index = (result.total_result -  result.start_index) % result.count
         atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
                                                     linkid, \
-                                                    start_index = result.totalResult - last_index, \
+                                                    start_index = result.total_result - last_index, \
                                                     rel = REL_LAST))
