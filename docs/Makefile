@@ -6,6 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = _build
+GITHUBPAGES   = ../../cedaMarkupDoc
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -29,9 +30,19 @@ help:
 
 clean:
 	-rm -rf $(BUILDDIR)/*
+	#Maurizio customization to deploy automatically github pages
+	#--------------------------------
+	-rm -rf $(GITHUBPAGES)/_sources
+	-rm -rf $(GITHUBPAGES)/_static
+	-rm -rf $(GITHUBPAGES)/ceda_markup
+	#--------------------------------
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	#Maurizio customization to deploy automatically github pages
+	#--------------------------------
+	-cp -r $(BUILDDIR)/html/* $(GITHUBPAGES)/.
+	#--------------------------------
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
