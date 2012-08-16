@@ -42,7 +42,9 @@ REL_SEARCH = 'search'
 REL_FIRST = 'first'    
 REL_NEXT = 'next'    
 REL_LAST = 'last'
-REL = [REL_ALTERNATE, REL_ENCLOSURE, REL_RELATED, REL_SELF, REL_VIA, REL_SEARCH, REL_FIRST, REL_NEXT, REL_LAST]
+REL_PREV = 'prev'
+REL = [REL_ALTERNATE, REL_ENCLOSURE, REL_RELATED, REL_SELF, REL_VIA, \
+       REL_SEARCH, REL_FIRST, REL_NEXT, REL_LAST, REL_PREV]
 
 def createLink(href, root = None, ns = ATOM_NAMESPACE, rel = None, itype = None, hreflang = None, title = None, length = None):
           

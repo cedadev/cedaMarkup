@@ -34,7 +34,7 @@ from ceda_markup.opensearch.template.osresponse import OSEngineResponse
 from ceda_markup.opensearch import create_autodiscovery_link,\
     generate_autodiscovery_path
 from ceda_markup.atom.link import REL_SEARCH, REL_SELF, REL_FIRST, REL_NEXT,\
-    REL_LAST
+    REL_LAST, REL_PREV
 from ceda_markup.atom.atom import createAtomDocument
 from ceda_markup.opensearch.os_response import createOpenSearchRespose
 from xml.dom import minidom
@@ -99,6 +99,17 @@ class OSAtomResponse(OSEngineResponse):
                                                     linkid, \
                                                     start_index = result.start_index, \
                                                     rel = REL_NEXT))
+            
+        if result.start_index - result.count > 0:
+            atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
+                                                    linkid, \
+                                                    start_index = result.start_index - result.count, \
+                                                    rel = REL_PREV))     
+        else:
+            atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
+                                                    linkid, \
+                                                    start_index = 1, \
+                                                    rel = REL_PREV))            
             
         last_index = (result.total_result -  result.start_index) % result.count
         atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
