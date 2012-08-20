@@ -42,7 +42,7 @@ REL_SEARCH = 'search'
 REL_FIRST = 'first'    
 REL_NEXT = 'next'    
 REL_LAST = 'last'
-REL_PREV = 'prev'
+REL_PREV = 'previous'
 REL = [REL_ALTERNATE, REL_ENCLOSURE, REL_RELATED, REL_SELF, REL_VIA, \
        REL_SEARCH, REL_FIRST, REL_NEXT, REL_LAST, REL_PREV]
 
