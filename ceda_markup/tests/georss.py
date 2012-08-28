@@ -55,7 +55,7 @@ class GeoRSSTest(unittest.TestCase):
         root.append(where)             
         self.assertEqual(tostring(root), '<metadata xmlns="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml">\
 <where><gml:Polygon><gml:exterior><gml:LinearRing>\
-<gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</gml:posList>\
+<gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45 </gml:posList>\
 </gml:LinearRing></gml:exterior></gml:Polygon></where></metadata>')
         
         root = Element('myCustomTag')
@@ -63,5 +63,5 @@ class GeoRSSTest(unittest.TestCase):
         root.append(georss)        
         self.assertEqual(tostring(root), '<myCustomTag xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml">\
 <georss:where><gml:Polygon><gml:exterior><gml:LinearRing>\
-<gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</gml:posList>\
+<gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45 </gml:posList>\
 </gml:LinearRing></gml:exterior></gml:Polygon></georss:where></myCustomTag>')                

@@ -53,14 +53,13 @@ class GmlTest(unittest.TestCase):
 
     def pos_list_test(self):   
         postList = create_test_pos_list()         
-        self.assertEqual(tostring(postList), '<posList xmlns="http://www.opengis.net/gml">\
-45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</posList>')
+        self.assertEqual(tostring(postList), '<posList xmlns="http://www.opengis.net/gml">45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45 </posList>')
         
         root = Element('myCustomTag')
         postList = create_test_pos_list(root)
         root.append(postList)        
         self.assertEqual(tostring(root), '<myCustomTag xmlns:gml="http://www.opengis.net/gml">\
-<gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</gml:posList></myCustomTag>')
+<gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45 </gml:posList></myCustomTag>')
         
     def linear_ring(self):
         root = createGML()
@@ -81,13 +80,13 @@ class GmlTest(unittest.TestCase):
         exterior = create_test_exterior(iroot)
         iroot.append(exterior) 
         self.assertEqual(tostring(iroot), '<metadata xmlns="http://www.opengis.net/gml"><exterior>\
-<LinearRing><posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</posList></LinearRing></exterior></metadata>')
+<LinearRing><posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45 </posList></LinearRing></exterior></metadata>')
         
         iroot = Element('myCustomTag')
         exterior = create_test_exterior(iroot)
         iroot.append(exterior)                        
         self.assertEqual(tostring(iroot), '<myCustomTag xmlns:gml="http://www.opengis.net/gml">\
-<gml:exterior><gml:LinearRing><gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</gml:posList>\
+<gml:exterior><gml:LinearRing><gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45 </gml:posList>\
 </gml:LinearRing></gml:exterior></myCustomTag>')        
         
     def polygon_test(self):
@@ -95,13 +94,13 @@ class GmlTest(unittest.TestCase):
         polygon = create_test_polygon(root = root)
         root.append(polygon)         
         self.assertEqual(tostring(root), '<metadata xmlns="http://www.opengis.net/gml"><Polygon><exterior>\
-<LinearRing><posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</posList></LinearRing></exterior></Polygon></metadata>')
+<LinearRing><posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45 </posList></LinearRing></exterior></Polygon></metadata>')
         
         root = Element('myCustomTag')
         polygon = create_test_polygon(root)
         root.append(polygon)                 
         self.assertEqual(tostring(root), '<myCustomTag xmlns:gml="http://www.opengis.net/gml"><gml:Polygon><gml:exterior>\
-<gml:LinearRing><gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45</gml:posList></gml:LinearRing>\
+<gml:LinearRing><gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45 </gml:posList></gml:LinearRing>\
 </gml:exterior></gml:Polygon></myCustomTag>')        
         
     def begin_position_test(self):                
@@ -156,8 +155,10 @@ class GmlTest(unittest.TestCase):
 <gml:TimePeriod><gml:beginPosition>2011-03-20T12:31:15.451Z</gml:beginPosition>\
 <gml:endPosition>2011-03-20T12:31:15.451Z</gml:endPosition></gml:TimePeriod></gml:validTime></myCustomTag>')                 
                 
-def create_test_pos_list(root = None, body = '45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45'):
-    return createPosList(root, body = body)
+def create_test_pos_list(root = None, body = [45.256, -110.45, 46.46, 
+                                              -109.48, 43.84, -109.86, 
+                                              45.256, -110.45]):
+    return createPosList(root, values = body)
 
 def create_test_linear_ring(root = None, body = None):
     if body == None:
