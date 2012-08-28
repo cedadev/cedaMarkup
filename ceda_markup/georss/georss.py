@@ -44,12 +44,15 @@ def createGEORSS(root = None, tagName = GEORSS_ROOT_TAG, ns = GEORSS_NAMESPACE):
     '''
     return createMarkup(tagName, GEORSS_PREFIX, ns, root)
 
-def createWhere(root = None, body = None, ns = GEORSS_NAMESPACE):      
-    '''
-        @param root: the root tag of the document containing this element
-        @param body: a gml.Polygon instance (for now....)
-        @param ns: the tag namespace 
-    '''
+def createWhere(root = None, body = None, ns = GEORSS_NAMESPACE):   
+    """
+        Creates a GEORSS.Where tag
+        **Parameters**
+            * root: the root tag of the document containing this element
+            * values: one instance among 
+            GML.Polygon, GML.Envelope        
+            * ns: the tag namespace              
+    """
     where = createMarkup('where', GEORSS_PREFIX, ns, root)
     if body is not None:
         where.append(body)

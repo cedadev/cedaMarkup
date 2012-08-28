@@ -44,18 +44,21 @@ def createGML(root = None, tagName = GML_ROOT_TAG, ns = GML_NAMESPACE):
     '''
     return createMarkup(tagName, GML_PREFIX, ns, root)
 
-def createPosList(root = None, ns = GML_NAMESPACE, body = None, srsDimension = None):      
-    '''
-        @param root: the root tag of the document containing this element
-        @param ns: the tag namespace 
-        @param body: a string like '45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45'
-        @param srsDimension: a number        
-    '''
+def createPosList(root = None, ns = GML_NAMESPACE, values = [], 
+                  srsDimension = None):      
+    """
+        Creates a GML.Envelope tag
+        **Parameters**
+            * root: the root tag of the document containing this element
+            * ns: the tag namespace
+            * values: a list of xsd:double 
+            * srsDimension: xsd:positiveInteger              
+    """  
     markup = createMarkup('posList', GML_PREFIX, ns, root)
     if srsDimension is not None:  
         markup.set('srsDimension', srsDimension)
-    if body is not None:                                
-        markup.text = body 
+    if values is not None:
+        markup.text = "".join(["%s " % el for el in values])
     return markup
 
 def createLinearRing(root = None, ns = GML_NAMESPACE, body = None):      
@@ -90,6 +93,47 @@ def createPolygon(root = None, ns = GML_NAMESPACE, body = None):
     if body is not None:
         markup.append(body)
     return markup        
+
+def createEnvelope(lowerCorner, upperCorner, 
+                   root = None, ns = GML_NAMESPACE):
+    """
+        Creates a GML.Envelope tag
+        **Parameters**
+            * lowerCorner: a GML.LowerCorner instance 
+            * upperCorner: a GML.UpperCorner instance
+            * root: the root tag of the document containing this element
+            * ns: the tag namespace 
+    """  
+    markup = createMarkup('Envelope', GML_PREFIX, ns, root)
+    markup.append(lowerCorner)
+    markup.append(upperCorner)
+    return markup
+
+def createLowerCorner(root = None, ns = GML_NAMESPACE, values = []):
+    """
+        Creates a GML.Envelope tag
+        **Parameters**
+            * root: the root tag of the document containing this element
+            * ns: the tag namespace
+            * values: a list of xsd:double
+    """  
+    markup = createMarkup('lowerCorner', GML_PREFIX, ns, root)
+    if values is not None:
+        markup.text = "".join(["%s " % el for el in values])
+    return markup
+     
+def createUpperCorner(root = None, ns = GML_NAMESPACE, values = []):
+    """
+        Creates a GML.Envelope tag
+        **Parameters**
+            * root: the root tag of the document containing this element
+            * ns: the tag namespace
+            * values: a list of xsd:double
+    """  
+    markup = createMarkup('upperCorner', GML_PREFIX, ns, root)
+    if values is not None:
+        markup.text = "".join(["%s " % el for el in values])
+    return markup     
      
 def createValidTime(root = None, ns = GML_NAMESPACE, body = None):      
     '''

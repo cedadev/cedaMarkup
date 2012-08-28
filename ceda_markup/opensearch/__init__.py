@@ -46,7 +46,7 @@ COUNT_DEFAULT = 10
 START_INDEX_DEFAULT = 1
 START_PAGE_DEFAULT = 1
 
-def filter_results(results, count = COUNT_DEFAULT, \
+def page_results(results, count = COUNT_DEFAULT, \
                    start_index = START_INDEX_DEFAULT, \
                    start_page = START_PAGE_DEFAULT):
     """
