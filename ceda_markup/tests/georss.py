@@ -34,6 +34,7 @@ import unittest
 from xml.etree.ElementTree import tostring, Element
 from ceda_markup.georss.georss import createGEORSS, createWhere
 from ceda_markup.tests.gml import create_test_polygon
+from ceda_markup.georss import create_where_from_postgis
 
 
 class GeoRSSTest(unittest.TestCase):
@@ -64,4 +65,57 @@ class GeoRSSTest(unittest.TestCase):
         self.assertEqual(tostring(root), '<myCustomTag xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml">\
 <georss:where><gml:Polygon><gml:exterior><gml:LinearRing>\
 <gml:posList>45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45 </gml:posList>\
-</gml:LinearRing></gml:exterior></gml:Polygon></georss:where></myCustomTag>')                
+</gml:LinearRing></gml:exterior></gml:Polygon></georss:where></myCustomTag>')   
+        
+                     
+    def create_where_from_postgis_test(self):
+        root = createGEORSS()
+        georss = \
+            create_where_from_postgis('BOX2D(45.256 -110.45, 46.46 -109.48)', 
+                                      root)
+        root.append(georss)
+        self.assertEqual(tostring(root), 
+                         '<metadata xmlns="http://www.georss.org/georss" \
+xmlns:gml="http://www.opengis.net/gml"><where><gml:Envelope>\
+<gml:lowerCorner>45.256 -110.45 </gml:lowerCorner>\
+<gml:upperCorner>46.46 -109.48 </gml:upperCorner>\
+</gml:Envelope></where></metadata>')
+        
+        root = createGEORSS()
+        georss = \
+            create_where_from_postgis('POLYGON((-71.1776585052917 42.3902909739571, -71.1776585052917 42.3902909739571))', 
+                                      root)
+        root.append(georss)
+        self.assertEqual(tostring(root), 
+                         '<metadata xmlns="http://www.georss.org/georss">\
+<where>\
+<Polygon xmlns="http://www.opengis.net/gml">\
+<exterior xmlns="http://www.opengis.net/gml">\
+<LinearRing xmlns="http://www.opengis.net/gml">\
+<posList srsDimension="2" xmlns="http://www.opengis.net/gml">\
+-71.1776585053 42.390290974 -71.1776585053 42.390290974 </posList>\
+</LinearRing></exterior></Polygon></where></metadata>')
+        
+        root = createGEORSS()
+        georss = \
+            create_where_from_postgis('MULTIPOLYGON(\
+            ((-71.1776585052917 42.3902909739571, -71.1776585052917 42.3902909739571)), \
+            ((-71.1776585052917 42.3902909739571, -71.1776585052917 42.3902909739571)))', 
+                                      root)
+        root.append(georss)
+        self.assertEqual(tostring(root), 
+                         '<metadata xmlns="http://www.georss.org/georss">\
+<where>\
+<Polygon xmlns="http://www.opengis.net/gml">\
+<exterior xmlns="http://www.opengis.net/gml">\
+<LinearRing xmlns="http://www.opengis.net/gml">\
+<posList srsDimension="2" xmlns="http://www.opengis.net/gml">\
+-71.1776585053 42.390290974 -71.1776585053 42.390290974 \
+</posList></LinearRing></exterior>\
+</Polygon>\
+<Polygon xmlns="http://www.opengis.net/gml">\
+<exterior xmlns="http://www.opengis.net/gml">\
+<LinearRing xmlns="http://www.opengis.net/gml">\
+<posList srsDimension="2" xmlns="http://www.opengis.net/gml">\
+-71.1776585053 42.390290974 -71.1776585053 42.390290974 \
+</posList></LinearRing></exterior></Polygon></where></metadata>')        

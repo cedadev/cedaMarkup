@@ -49,11 +49,16 @@ def createWhere(root = None, body = None, ns = GEORSS_NAMESPACE):
         Creates a GEORSS.Where tag
         **Parameters**
             * root: the root tag of the document containing this element
-            * values: one instance among 
-            GML.Polygon, GML.Envelope        
+            * body: one instance among GML.Envelope, GML.Polygon or [GML.Polygon]        
             * ns: the tag namespace              
     """
     where = createMarkup('where', GEORSS_PREFIX, ns, root)
+    items = []
     if body is not None:
-        where.append(body)
+        if not isinstance(body, list):
+            items.append(body)             
+        else:
+            items = body            
+        for item in items:
+            where.append(item)
     return where
