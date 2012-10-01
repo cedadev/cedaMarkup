@@ -83,15 +83,33 @@ def createExterior(root = None, ns = GML_NAMESPACE, body = None):
         markup.append(body)   
     return markup        
 
-def createPolygon(root = None, ns = GML_NAMESPACE, body = None):      
+def createInterior(root = None, ns = GML_NAMESPACE, body = None):      
     '''
         @param root: the root tag of the document containing this element
         @param ns: the tag namespace 
-        @param body: an instance of GML.Exterior
+        @param body: an instance of GML.LinerRing
+    '''
+    markup = createMarkup('interior', GML_PREFIX, ns, root)
+    if body is not None:
+        markup.append(body)   
+    return markup  
+
+def createPolygon(root = None, ns = GML_NAMESPACE, exterior = None, interior = None):      
+    '''
+        @param root: the root tag of the document containing this element
+        @param ns: the tag namespace 
+        @param exterior: an instance of GML.Exterior
+        @param interior: a list of GML.Interior instances         
     '''
     markup = createMarkup('Polygon', GML_PREFIX, ns, root)
-    if body is not None:
-        markup.append(body)
+    if exterior is not None:        
+        markup.append(exterior)
+                
+    if interior is not None \
+            and isinstance(interior, list) \
+            and len(interior) > 0:
+        for item in interior:
+            markup.append(item)                
     return markup        
 
 def createEnvelope(lowerCorner, upperCorner, 

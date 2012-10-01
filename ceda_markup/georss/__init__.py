@@ -1,5 +1,6 @@
 from ceda_markup.gml.gml import createPosList, createLinearRing, createExterior,\
-    createPolygon, createLowerCorner, createUpperCorner, createEnvelope
+    createPolygon, createLowerCorner, createUpperCorner, createEnvelope,\
+    createInterior
 from ceda_markup.georss.georss import createWhere
 import re
 
@@ -14,23 +15,14 @@ def create_where_from_postgis(geometry, root = None):
                             -71.160837 42.259113,
                             -71.161144 42.25932))`
         * `POINT(-71.064544 42.28787)`
-        * `POLYGON((-71.1776585052917 42.3902909739571,
-                    -71.1776820268866 42.3903701743239,
-                    -71.1776063012595 42.3903825660754,
-                    -71.1775826583081 42.3903033653531,
-                    -71.1776585052917 42.3902909739571))`
+        * `POLYGON(
+        (0 0,4 0,4 4,0 4,0 0),
+        (1 1, 2 1, 2 2, 1 2,1 1)
+        )`
         * `MULTIPOLYGON(
-                    ((-71.1776585052917 42.3902909739571,
-                    -71.1776820268866 42.3903701743239,
-                    -71.1776063012595 42.3903825660754,
-                    -71.1775826583081 42.3903033653531,
-                    -71.1776585052917 42.3902909739571)),
-                    ((-71.1043632495873 42.315113108546,
-                    -71.1043583974082 42.3151211109857,
-                    -71.1043443253471 42.3150676015829,
-                    -71.1043850704575 42.3150793250568,
-                    -71.1043632495873 42.315113108546))
-                    )`
+        ((0 0,4 0,4 4,0 4,0 0),(1 1,2 1,2 2,1 2,1 1)), 
+        ((-1 -1,-1 -2,-2 -2,-2 -1,-1 -1))
+        )`
         * `BOX2D(220186.984375 150406,220288.25 150506.140625)`       
         For such types this method return the georss:where properly filled.
         Actually supports only BOX2D. POLYGON, MULTIPOLYGON
@@ -49,9 +41,9 @@ def create_where_from_postgis(geometry, root = None):
     if geometry.startswith('MULTIPOLYGON') or geometry.startswith('POLYGON'):
         polygon = None 
         if geometry.startswith('MULTIPOLYGON'):
-            polygon = _create_polygon(geometry[13:-1], root = None)
+            polygon = _create_polygon_from_multi(geometry[13:-1], root = None)
         if geometry.startswith('POLYGON'):
-            polygon = _create_polygon(geometry[7:], root = None)
+            polygon = _create_polygon(geometry[8:-1], root = None)
         if polygon is not None:
             return createWhere(root = root, body = polygon)
     
@@ -64,20 +56,34 @@ def create_where_from_postgis(geometry, root = None):
         where_body = createEnvelope(lowerCorner, upperCorner, root)
         return createWhere(root = root, body = where_body)
         
-def _create_polygon(geometry, root = None):
+def _create_polygon(geometry, root = None):    
+    starts = [m.start() for m in re.finditer('\(', geometry)]
+    end = [m.start() for m in re.finditer('\)', geometry)]
+    
+    interior = []
+    exterior = None
+    for index in range(len(starts)):        
+        posList = createPosList(root = root, 
+                        values = [float(val) for val 
+                                  in geometry[starts[index] + 1:end[index]].\
+                                  replace(',', ' ').split()], 
+                        srsDimension = '2')
+        linearRing = createLinearRing(root = root, body = posList)
+        if len(starts) > 1:
+            interior.append(createInterior(root = root, body = linearRing))
+        elif len(starts) == 1:
+            exterior = createExterior(root = root, body = linearRing)
+    
+    return createPolygon(root = root, exterior = exterior, interior = interior)            
+        
+def _create_polygon_from_multi(geometry, root = None):
     polygons = []
     starts = [m.start() for m in re.finditer('\(\(', geometry)]
     end = [m.start() for m in re.finditer('\)\)', geometry)]
     
-    for index in range(len(starts)):        
-        posList = createPosList(root = root, 
-                        values = [float(val) for val 
-                                  in geometry[starts[index]+2:end[index]].\
-                                  replace(',', ' ').split()], 
-                        srsDimension = '2')
-        linearRing = createLinearRing(root = root, body = posList)
-        exterior = createExterior(root = root, body = linearRing)
-        polygons.append(createPolygon(root = root, body = exterior))
+    for index in range(len(starts)): 
+        text_polygons = geometry[starts[index] + 1:end[index] + 1]
+        polygons.append(_create_polygon(text_polygons, root = None))       
     
     if len(polygons) == 1:
         return polygons[0]
@@ -86,4 +92,5 @@ def _create_polygon(geometry, root = None):
         return polygons
     
     return None
+                
         

@@ -106,14 +106,21 @@ def filter_results(results, count = COUNT_DEFAULT, \
     return _results[first_result:last_result]
 
 def generate_autodiscovery_path(path, linkid, extension, \
-                                start_index = None, rel = REL_SELF):
+                                rel = REL_SELF, \
+                                count = None, start_index = None, \
+                                start_page=None):
     """
         Assemble a path pointing to an opensearch engine 
         @param path: the host URL
         @param linkid: the search id
         @param extension: the extension
-        @param start_index: the starting index
-        @param rel: a Link type identificator. If None returns a generic ID   
+        @param rel: a Link type identificator. If None returns a generic ID 
+        @param count: the number of search results per page 
+                        desired by the search client        
+        @param start_index: the first search result 
+                        desired by the search client  
+        @param start_page: the page number of the set of 
+                            search results desired by the search client            
     """
     if rel == None:
         if linkid:
@@ -133,24 +140,35 @@ def generate_autodiscovery_path(path, linkid, extension, \
         else:
             return "%s%s" % (path, extension)
 
+    ret = None
     if linkid:
-        return "%s%s/%s/?startIndex=%d" % (path, linkid, extension, start_index)
+        ret = "%s%s/%s/?" % (path, linkid, extension)
     else:
-        return "%s%s/?startIndex=%d" % (path, extension, start_index)
+        ret = "%s%s/?" % (path, extension)
+    
+    return "%sstartIndex=%d&count=%d" % (ret, start_index, count)
 
 
-def create_autodiscovery_link(root, path, extension = None, linkid = None, \
-                              start_index = 0, rel = REL_SELF):
+def create_autodiscovery_link(root, path, extension = None, \
+                              linkid = None, \
+                              rel = REL_SELF, \
+                              count=None, start_index=None, start_page=None):
     """
         Appends an autodiscovery link to the given 'root' document 
         @param path: the host URL
         @param extension: the extension
         @param linkid: the search id        
-        @param startIndex: the starting index
-        @param rel: a Link type identificator. If None returns a generic ID  
+        @param rel: a Link type identificator. If None returns a generic ID
+        @param count: the number of search results per page 
+                        desired by the search client        
+        @param start_index: the first search result 
+                        desired by the search client  
+        @param start_page: the page number of the set of 
+                            search results desired by the search client        
     """
     href = generate_autodiscovery_path(path, linkid, \
-                                       extension, start_index, rel)    
+                                       extension, rel, \
+                                       count, start_index, start_page)    
     itype = get_mimetype(extension)
     if rel == ATOM_LINK_REL_SEARCH:
         itype = get_mimetype('opensearchdescription')      

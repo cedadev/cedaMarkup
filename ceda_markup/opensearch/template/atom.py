@@ -58,10 +58,13 @@ class OSAtomResponse(OSEngineResponse):
         pass
 
     def generate_response(self, results, queries, osHostURL, context):
-        ospath = generate_autodiscovery_path(osHostURL, None, self.extension, rel = None)
+        ospath = generate_autodiscovery_path(osHostURL, None, \
+                                             extension = self.extension, \
+                                             rel = None)
         
         #Generates the ATOM document
-        atomdoc = createAtomDocument(ospath + "atom", results.title, results.updated)
+        atomdoc = createAtomDocument(ospath + "atom", \
+                                     results.title, results.updated)
 
         #Generate feed's links
         self._generate_feed_links(atomdoc, ospath, results)
@@ -73,46 +76,60 @@ class OSAtomResponse(OSEngineResponse):
         self.generate_entries(atomdoc, results.subresult, ospath)
         
         reparsed = minidom.parseString(tostring(atomdoc))
-        return reparsed.toprettyxml(indent="  ")
+        return reparsed.toprettyxml()
     
         
     def _generate_feed_links(self, atomroot, path, result, linkid = None):
         '''
         Appends a number of atom <links> tags  
         '''
-        atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
-                                                linkid, start_index = None, rel = REL_SEARCH))        
-        atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
-                                                linkid, start_index = result.start_index, \
-                                                rel = REL_SELF))        
-        atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
-                                                linkid, \
-                                                start_index = 1, rel = REL_FIRST))
+        atomroot.append(create_autodiscovery_link(atomroot, path, \
+                                                  self.extension, \
+                                                  linkid, rel = REL_SEARCH, \
+                                                  count = result.count, \
+                                                  start_index = None))        
+        atomroot.append(create_autodiscovery_link(atomroot, path, \
+                                                  self.extension, \
+                                                  linkid, \
+                                                  rel = REL_SELF, \
+                                                  count = result.count, \
+                                                  start_index = result.start_index))        
+        atomroot.append(create_autodiscovery_link(atomroot, path, \
+                                                  self.extension, \
+                                                  linkid, \
+                                                  rel = REL_FIRST, \
+                                                  count = result.count, \
+                                                  start_index = 1))
         
-        if result.total_result > result.start_index + result.count:
+        if result.total_result >= result.start_index + result.count:
             atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
                                                     linkid, \
-                                                    start_index = result.start_index + result.count, \
-                                                    rel = REL_NEXT))     
+                                                    rel = REL_NEXT, \
+                                                    count = result.count, \
+                                                    start_index = result.start_index + result.count))  
         else:
             atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
                                                     linkid, \
-                                                    start_index = result.start_index, \
-                                                    rel = REL_NEXT))
+                                                    rel = REL_NEXT, \
+                                                    count = result.count, \
+                                                    start_index = result.start_index))
             
         if result.start_index - result.count > 0:
             atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
                                                     linkid, \
-                                                    start_index = result.start_index - result.count, \
-                                                    rel = REL_PREV))     
+                                                    rel = REL_PREV, \
+                                                    count = result.count, \
+                                                    start_index = result.start_index - result.count))     
         else:
             atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
                                                     linkid, \
-                                                    start_index = 1, \
-                                                    rel = REL_PREV))            
+                                                    rel = REL_PREV, \
+                                                    count = result.count, \
+                                                    start_index = 1))            
             
         last_index = (result.total_result -  result.start_index) % result.count
         atomroot.append(create_autodiscovery_link(atomroot, path, self.extension, \
                                                     linkid, \
-                                                    start_index = result.total_result - last_index, \
-                                                    rel = REL_LAST))
+                                                    rel = REL_LAST,
+                                                    count = result.count, \
+                                                    start_index = result.total_result - last_index))

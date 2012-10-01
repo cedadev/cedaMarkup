@@ -83,39 +83,50 @@ xmlns:gml="http://www.opengis.net/gml"><where><gml:Envelope>\
         
         root = createGEORSS()
         georss = \
-            create_where_from_postgis('POLYGON((-71.1776585052917 42.3902909739571, -71.1776585052917 42.3902909739571))', 
+            create_where_from_postgis('POLYGON((0 0,4 0,4 4,0 4,0 0),(1 1, 2 1, 2 2, 1 2,1 1))', 
                                       root)
         root.append(georss)
         self.assertEqual(tostring(root), 
                          '<metadata xmlns="http://www.georss.org/georss">\
 <where>\
 <Polygon xmlns="http://www.opengis.net/gml">\
-<exterior xmlns="http://www.opengis.net/gml">\
+<interior xmlns="http://www.opengis.net/gml">\
 <LinearRing xmlns="http://www.opengis.net/gml">\
 <posList srsDimension="2" xmlns="http://www.opengis.net/gml">\
--71.1776585053 42.390290974 -71.1776585053 42.390290974 </posList>\
-</LinearRing></exterior></Polygon></where></metadata>')
+0.0 0.0 4.0 0.0 4.0 4.0 0.0 4.0 0.0 0.0 </posList>\
+</LinearRing></interior>\
+<interior xmlns="http://www.opengis.net/gml">\
+<LinearRing xmlns="http://www.opengis.net/gml">\
+<posList srsDimension="2" xmlns="http://www.opengis.net/gml">\
+1.0 1.0 2.0 1.0 2.0 2.0 1.0 2.0 1.0 1.0 </posList>\
+</LinearRing></interior></Polygon></where></metadata>')
         
         root = createGEORSS()
         georss = \
             create_where_from_postgis('MULTIPOLYGON(\
-            ((-71.1776585052917 42.3902909739571, -71.1776585052917 42.3902909739571)), \
-            ((-71.1776585052917 42.3902909739571, -71.1776585052917 42.3902909739571)))', 
+            ((0 0,4 0,4 4,0 4,0 0),(1 1,2 1,2 2,1 2,1 1)), \
+            ((-1 -1,-1 -2,-2 -2,-2 -1,-1 -1))\
+            )', 
                                       root)
         root.append(georss)
         self.assertEqual(tostring(root), 
                          '<metadata xmlns="http://www.georss.org/georss">\
 <where>\
 <Polygon xmlns="http://www.opengis.net/gml">\
-<exterior xmlns="http://www.opengis.net/gml">\
+<interior xmlns="http://www.opengis.net/gml">\
 <LinearRing xmlns="http://www.opengis.net/gml">\
 <posList srsDimension="2" xmlns="http://www.opengis.net/gml">\
--71.1776585053 42.390290974 -71.1776585053 42.390290974 \
-</posList></LinearRing></exterior>\
+0.0 0.0 4.0 0.0 4.0 4.0 0.0 4.0 0.0 0.0 </posList>\
+</LinearRing></interior>\
+<interior xmlns="http://www.opengis.net/gml">\
+<LinearRing xmlns="http://www.opengis.net/gml">\
+<posList srsDimension="2" xmlns="http://www.opengis.net/gml">\
+1.0 1.0 2.0 1.0 2.0 2.0 1.0 2.0 1.0 1.0 </posList></LinearRing></interior>\
 </Polygon>\
 <Polygon xmlns="http://www.opengis.net/gml">\
 <exterior xmlns="http://www.opengis.net/gml">\
 <LinearRing xmlns="http://www.opengis.net/gml">\
 <posList srsDimension="2" xmlns="http://www.opengis.net/gml">\
--71.1776585053 42.390290974 -71.1776585053 42.390290974 \
-</posList></LinearRing></exterior></Polygon></where></metadata>')        
+-1.0 -1.0 -1.0 -2.0 -2.0 -2.0 -2.0 -1.0 -1.0 -1.0 </posList>\
+</LinearRing></exterior>\
+</Polygon></where></metadata>')        
