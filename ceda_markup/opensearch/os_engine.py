@@ -82,10 +82,13 @@ class OSEngine(object):
             if item.extension == mimetype:
                 response = item
         if response is not None:
-            queries = create_query(mimetype, self.os_query.params_model, context)
+            query = create_query(mimetype, self.os_query.params_model, context)
             result = self.os_query.do_search(context)
             packaged_results = response.digest_search_results(result, context)
-            return response.generate_response(packaged_results, [queries], self.os_host_url, context)
+            return response.generate_response(packaged_results, query, \
+                                              self.os_host_url, \
+                                              self.os_query.params_model, \
+                                              context)
         return None              
     
     def get_description(self, ospath):

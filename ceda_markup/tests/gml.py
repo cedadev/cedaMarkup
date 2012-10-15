@@ -173,7 +173,7 @@ def create_test_exterior(root = None, body = None):
 def create_test_polygon(root = None, body = None):
     if body == None:        
         return createPolygon(root, exterior = create_test_exterior(root))         
-    return createPolygon(root, body = body)
+    return createPolygon(root, exterior = body)
 
 def create_test_begin_position(root = None, body = '2011-03-20T12:31:15.451Z'):
     return createBeginPosition(root, body = body)

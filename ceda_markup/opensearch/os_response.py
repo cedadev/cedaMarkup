@@ -70,7 +70,8 @@ def createItemsPerPage(items_per_page, root = None, tagName = OS_ROOT_TAG, ns = 
         tr = str(items_per_page)
     return createSimpleMarkup(tr, root, 'indexPerPage', ns, OS_PREFIX)
 
-def createOpenSearchRespose(root, totalResults = None, startIndex = None, itemsPerPage = None, queries = None):                
+def createOpenSearchRespose(root, totalResults = None, startIndex = None, \
+                            itemsPerPage = None, query = None):                
     if totalResults is not None:
         markup = createTotalResults(totalResults, root)
         root.append(markup)            
@@ -82,6 +83,5 @@ def createOpenSearchRespose(root, totalResults = None, startIndex = None, itemsP
     if itemsPerPage is not None:
         markup = createItemsPerPage(itemsPerPage, root)
         root.append(markup)
-
-    for query in queries:                       
-        root.append(query)
+                       
+    root.append(query)

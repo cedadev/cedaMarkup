@@ -31,7 +31,7 @@ Created on 21 Jun 2012
 @author: Maurizio Nagni
 '''
 
-__version__ = '0.0.12'
+__version__ = '0.0.13'
 
 import mimetypes
 if not mimetypes.inited:

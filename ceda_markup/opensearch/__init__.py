@@ -106,21 +106,17 @@ def filter_results(results, count = COUNT_DEFAULT, \
     return _results[first_result:last_result]
 
 def generate_autodiscovery_path(path, linkid, extension, \
-                                rel = REL_SELF, \
-                                count = None, start_index = None, \
-                                start_page=None):
+                                params_model, context, \
+                                rel = REL_SELF, start_index = None):
     """
         Assemble a path pointing to an opensearch engine 
         @param path: the host URL
         @param linkid: the search id
         @param extension: the extension
-        @param rel: a Link type identificator. If None returns a generic ID 
-        @param count: the number of search results per page 
-                        desired by the search client        
-        @param start_index: the first search result 
-                        desired by the search client  
-        @param start_page: the page number of the set of 
-                            search results desired by the search client            
+        @param params_model: a list of OSParam instances
+        @param context: a dictionary containing one value or None to pair with the params_model        
+        @param rel: a Link type identificator. If None returns a generic ID
+        @param startIndex:              
     """
     if rel == None:
         if linkid:
@@ -145,30 +141,40 @@ def generate_autodiscovery_path(path, linkid, extension, \
         ret = "%s%s/%s/?" % (path, linkid, extension)
     else:
         ret = "%s%s/?" % (path, extension)
-    
-    return "%sstartIndex=%d&count=%d" % (ret, start_index, count)
+     
+    for param in params_model:
+        if param.par_name == 'startIndex':
+            if start_index is None:
+                ret = ret + "&%s=%s" % (param.par_name, context[param.par_name])
+            else:
+                ret = ret + "&%s=%s" % (param.par_name, start_index)
+        else:
+            if param.par_name in context \
+                    and context[param.par_name] is not None:
+                ret = ret + "&%s=%s" \
+                    % (param.par_name, context[param.par_name])                
+    return ret
 
 
-def create_autodiscovery_link(root, path, extension = None, \
+def create_autodiscovery_link(root, path, \
+                              params_model, context, \
+                              extension = None, \
                               linkid = None, \
-                              rel = REL_SELF, \
-                              count=None, start_index=None, start_page=None):
+                              rel = REL_SELF,
+                              start_index = None):
     """
         Appends an autodiscovery link to the given 'root' document 
-        @param path: the host URL
+        @param path: the host URL        
         @param extension: the extension
         @param linkid: the search id        
         @param rel: a Link type identificator. If None returns a generic ID
-        @param count: the number of search results per page 
-                        desired by the search client        
-        @param start_index: the first search result 
-                        desired by the search client  
-        @param start_page: the page number of the set of 
-                            search results desired by the search client        
+        @param params_model: a list of OSParam instances
+        @param context: a dictionary containing one value or None to pair with the params_model                
     """
     href = generate_autodiscovery_path(path, linkid, \
-                                       extension, rel, \
-                                       count, start_index, start_page)    
+                                       extension, \
+                                       params_model, context, \
+                                       rel, start_index)    
     itype = get_mimetype(extension)
     if rel == ATOM_LINK_REL_SEARCH:
         itype = get_mimetype('opensearchdescription')      
