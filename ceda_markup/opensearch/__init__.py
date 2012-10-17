@@ -4,7 +4,7 @@ from ceda_markup import get_mimetype
 from ceda_markup.atom.atom import ATOM_LINK_REL_SEARCH, createLink
 
 def assign_prefix(root, param):
-    if param.namespace is None:
+    if param.namespace is None or param.namespace == root.attrib['xmlns']:
         return param.term_name
     
     for key, value in root.items():
