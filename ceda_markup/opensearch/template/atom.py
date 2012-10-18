@@ -78,7 +78,7 @@ class OSAtomResponse(OSEngineResponse):
                                      results.title, results.updated)
 
         #Generate feed's links
-        atomdoc.append(create_autodiscovery_link(atomdoc, osHostURL, \
+        atomdoc.append(create_autodiscovery_link(atomdoc, url, \
                                           params_model, context,
                                           self.extension, rel = REL_SEARCH, \
                                           start_index = None))        

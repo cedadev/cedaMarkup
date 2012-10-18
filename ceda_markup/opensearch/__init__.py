@@ -121,7 +121,7 @@ def generate_autodiscovery_path(path, extension, \
         return path
 
     if rel == REL_SEARCH:
-        return "%s/search/description" % (path)
+        return "%s/description" % (path)
     
     if rel == REL_ALTERNATE:
         return "%s/%s" % (path, extension)
