@@ -58,9 +58,17 @@ class OSAtomResponse(OSEngineResponse):
                          params_model, context):
         pass
 
+    @abstractmethod
+    def generate_url(self, osHostURL, context):
+        '''
+            Returns the proper URL to assemble the OSResponse links
+        '''
+        pass
+
     def generate_response(self, results, query, osHostURL, \
                           params_model, context):
-        ospath = generate_autodiscovery_path(osHostURL, None, \
+        url = self.generate_url(osHostURL, context)        
+        ospath = generate_autodiscovery_path(url, \
                                              self.extension, \
                                              params_model, context, \
                                              rel = None)
@@ -70,6 +78,10 @@ class OSAtomResponse(OSEngineResponse):
                                      results.title, results.updated)
 
         #Generate feed's links
+        atomdoc.append(create_autodiscovery_link(atomdoc, osHostURL, \
+                                          params_model, context,
+                                          self.extension, rel = REL_SEARCH, \
+                                          start_index = None))        
         self._generate_feed_links(atomdoc, ospath, results, \
                                   params_model, context)
         
@@ -77,7 +89,7 @@ class OSAtomResponse(OSEngineResponse):
         createOpenSearchRespose(atomdoc, results.total_result, \
                                 results.start_index, results.count, query)
         
-        self.generate_entries(atomdoc, results.subresult, ospath, \
+        self.generate_entries(atomdoc, results.subresult, osHostURL, \
                               params_model, context)
         
         return tostring(atomdoc)
@@ -86,62 +98,50 @@ class OSAtomResponse(OSEngineResponse):
     
         
     def _generate_feed_links(self, atomroot, path, result, \
-                             params_model, context, linkid = None):
+                             params_model, context):
         '''
         Appends a number of atom <links> tags  
-        '''
+        '''      
         atomroot.append(create_autodiscovery_link(atomroot, path, \
-                                                  params_model, context,
-                                                  self.extension, \
-                                                  linkid, rel = REL_SEARCH, \
-                                                  start_index = None))        
+                                            params_model, context, \
+                                            self.extension, \
+                                            rel = REL_SELF, \
+                                            start_index = result.start_index))        
         atomroot.append(create_autodiscovery_link(atomroot, path, \
-                                                  params_model, context, \
-                                                  self.extension, \
-                                                  linkid, \
-                                                  rel = REL_SELF, \
-                                                  start_index = result.start_index))        
-        atomroot.append(create_autodiscovery_link(atomroot, path, \
-                                                  params_model, context, \
-                                                  self.extension, \
-                                                  linkid, \
-                                                  rel = REL_FIRST, \
-                                                  start_index = 1))
+                                            params_model, context, \
+                                            self.extension, \
+                                            rel = REL_FIRST, \
+                                            start_index = 1))
         
         if result.total_result >= result.start_index + result.count:
             atomroot.append(create_autodiscovery_link(atomroot, path, \
-                                                      params_model, context, \
-                                                      self.extension, \
-                                                    linkid, \
-                                                    rel = REL_NEXT, \
-                                                    start_index = result.start_index + result.count))  
+                            params_model, context, \
+                            self.extension, \
+                            rel = REL_NEXT, \
+                            start_index = result.start_index + result.count))  
         else:
             atomroot.append(create_autodiscovery_link(atomroot, path, \
-                                                      params_model, context, \
-                                                      self.extension, \
-                                                    linkid, \
-                                                    rel = REL_NEXT, \
-                                                    start_index = result.start_index))
+                                            params_model, context, \
+                                            self.extension, \
+                                            rel = REL_NEXT, \
+                                            start_index = result.start_index))
             
         if result.start_index - result.count > 0:
             atomroot.append(create_autodiscovery_link(atomroot, path, \
-                                                      params_model, context, \
-                                                      self.extension, \
-                                                    linkid, \
-                                                    rel = REL_PREV, \
-                                                    start_index = result.start_index - result.count))     
+                            params_model, context, \
+                            self.extension, \
+                            rel = REL_PREV, \
+                            start_index = result.start_index - result.count))     
         else:
             atomroot.append(create_autodiscovery_link(atomroot, path, \
-                                                      params_model, context, \
-                                                      self.extension, \
-                                                    linkid, \
-                                                    rel = REL_PREV, \
-                                                    start_index = 1))            
+                                            params_model, context, \
+                                            self.extension, \
+                                            rel = REL_PREV, \
+                                            start_index = 1))            
             
         last_index = (result.total_result -  result.start_index) % result.count
         atomroot.append(create_autodiscovery_link(atomroot, path, \
-                                                  params_model, context, \
-                                                  self.extension, \
-                                                    linkid, \
-                                                    rel = REL_LAST, \
-                                                    start_index = result.total_result - last_index))
+                            params_model, context, \
+                            self.extension, \
+                            rel = REL_LAST, \
+                            start_index = result.total_result - last_index))

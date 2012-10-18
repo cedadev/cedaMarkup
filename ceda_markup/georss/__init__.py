@@ -83,7 +83,7 @@ def _create_polygon_from_multi(geometry, root = None):
     
     for index in range(len(starts)): 
         text_polygons = geometry[starts[index] + 1:end[index] + 1]
-        polygons.append(_create_polygon(text_polygons, root = None))       
+        polygons.append(_create_polygon(text_polygons, root))       
     
     if len(polygons) == 1:
         return polygons[0]

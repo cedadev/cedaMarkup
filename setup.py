@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from distutils.core import setup
-from setuptools import find_packages
 import re
 from os import path
+from distutils.core import setup
+from setuptools import find_packages
 
 v_file = open(path.join(path.dirname(__file__), 
                         'ceda_markup', '__init__.py'))
@@ -22,8 +22,3 @@ setup(
     long_description=open('README').read(),
     zip_safe=False,
 )
-
-'''
-zip_safe=False option. It prevents the package manager to install a 
-      python egg, instead you'll get a real directory with files in it.
-'''

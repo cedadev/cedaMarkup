@@ -105,42 +105,28 @@ def filter_results(results, count = COUNT_DEFAULT, \
 
     return _results[first_result:last_result]
 
-def generate_autodiscovery_path(path, linkid, extension, \
+def generate_autodiscovery_path(path, extension, \
                                 params_model, context, \
                                 rel = REL_SELF, start_index = None):
     """
         Assemble a path pointing to an opensearch engine 
         @param path: the host URL
-        @param linkid: the search id
         @param extension: the extension
         @param params_model: a list of OSParam instances
         @param context: a dictionary containing one value or None to pair with the params_model        
         @param rel: a Link type identificator. If None returns a generic ID
         @param startIndex:              
     """
-    if rel == None:
-        if linkid:
-            return "%s/search/%s/" % (path, linkid)
-        else:
-            return "%s/search/" % (path)
+    if rel == None:        
+        return path
 
     if rel == REL_SEARCH:
-        if linkid:
-            return "%s%s/description" % (path, linkid)    
-        else:
-            return "%sdescription" % (path)
+        return "%s/search/description" % (path)
     
     if rel == REL_ALTERNATE:
-        if linkid:
-            return "%s%s/%s" % (path, linkid, extension)
-        else:
-            return "%s%s" % (path, extension)
+        return "%s/%s" % (path, extension)
 
-    ret = None
-    if linkid:
-        ret = "%s%s/%s/?" % (path, linkid, extension)
-    else:
-        ret = "%s%s/?" % (path, extension)
+    ret = "%s/%s/?" % (path, extension)
      
     for param in params_model:
         if param.par_name == 'startIndex':
@@ -159,20 +145,17 @@ def generate_autodiscovery_path(path, linkid, extension, \
 def create_autodiscovery_link(root, path, \
                               params_model, context, \
                               extension = None, \
-                              linkid = None, \
                               rel = REL_SELF,
                               start_index = None):
     """
         Appends an autodiscovery link to the given 'root' document 
         @param path: the host URL        
-        @param extension: the extension
-        @param linkid: the search id        
+        @param extension: the extension        
         @param rel: a Link type identificator. If None returns a generic ID
         @param params_model: a list of OSParam instances
         @param context: a dictionary containing one value or None to pair with the params_model                
     """
-    href = generate_autodiscovery_path(path, linkid, \
-                                       extension, \
+    href = generate_autodiscovery_path(path, extension, \
                                        params_model, context, \
                                        rel, start_index)    
     itype = get_mimetype(extension)
