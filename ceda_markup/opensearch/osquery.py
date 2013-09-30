@@ -71,10 +71,11 @@ class OSQuery(object):
             self.pageOffset = URL_PAGE_OFFSET_DEFAULT
             
     @abstractmethod
-    def do_search(self, context):
+    def do_search(self, query, context):
         """
             Implements the search call.
-            @param context: a dictionary populated by the client containing all the necessary informations
+            -ElementTree.Element **query** an OpenSearch Query element
+            -dict **context**: a dictionary of custom parameters 
             @return: a list of results items 
         """
         pass 

@@ -49,6 +49,7 @@ def create_query(mimetype, params_model, context, is_response = True, \
     markup = createMarkup('Query', OS_PREFIX, n_s, root)
     markup.set("role", "request")
     for param in params_model:
+        markup.set(param.par_name, param.default)        
         if param.par_name in context and context[param.par_name] is not None:
-            markup.set(param.par_name, context[param.par_name])
-    return markup       
+                markup.set(param.par_name, context[param.par_name])
+    return markup      

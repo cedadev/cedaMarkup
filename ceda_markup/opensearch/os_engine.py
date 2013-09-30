@@ -83,7 +83,7 @@ class OSEngine(object):
                 response = item
         if response is not None:
             query = create_query(mimetype, self.os_query.params_model, context)
-            result = self.os_query.do_search(context)
+            result = self.os_query.do_search(query, context)
             packaged_results = response.digest_search_results(result, context)
             return response.generate_response(packaged_results, query, \
                                               self.os_host_url, \

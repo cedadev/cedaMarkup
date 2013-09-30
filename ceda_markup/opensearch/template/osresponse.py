@@ -46,12 +46,15 @@ class OSEngineResponse(object):
         self.extension = extension
         
     @abstractmethod
-    def generate_response(self, result, queries, ospath, context):
+    def generate_response(self, results, query, \
+                          ospath, params_model, context):
         '''
-            @param result: the output from digestSearchResults method
-            @param queries: the value returned by a QueryTag.queryWithRoleRequest invocation
-            @param hostURL: the opensearch engine URL
-            @param kwargs: a dictionary of custom parameters 
+            -not defined **results**: the output from 
+            :ref:`OSEngineResponse.digest_search_results <ceda_markup.opensearch.template.OSEngineResponse.digest_search_results>`
+            - ElementTree.Element **query** an OpenSearch Query element 
+            -string **ospath**: the URL where the OpenSearch service is hosted
+            -list[OSParam] **params_model**: the underlying OSQuery.params_model            
+            -dict **context**: a dictionary of custom parameters 
         '''
         pass
     
@@ -59,9 +62,7 @@ class OSEngineResponse(object):
     def digest_search_results(self, results, context):
         '''
             @param results: the value returned from a OSQuery.doSearch instance invocation
-            @param queries: the value returned by a QueryTag.queryWithRoleRequest invocation
-            @param ospath: the host URL
-            @param kwargs: a dictionary of custom parameters 
+            @param context: the value returned by a QueryTag.queryWithRoleRequest invocation 
         '''
         pass    
      

@@ -37,7 +37,7 @@ from xml.etree.ElementTree import tostring, Element
 from ceda_markup.atom.info import createTitle
 
 
-class AtomTest(unittest.TestCase):
+class AtomTest(unittest.TestCase):  
 
     def atom_test(self):
         #atom tag as root
