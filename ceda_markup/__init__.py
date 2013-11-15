@@ -36,11 +36,11 @@ __version__ = '0.1.0'
 import mimetypes
 if not mimetypes.inited:
     mimetypes.init()
-    if not getattr(mimetypes, 'types_map').has_key('.atom'):
-        mimetypes.add_type('application/atom+xml', '.atom')
-    if not getattr(mimetypes, 'types_map').has_key('.opensearchdescription'):        
-        mimetypes.add_type('application/opensearchdescription+xml', \
-                           '.opensearchdescription')
+if not getattr(mimetypes, 'types_map').has_key('.atom'):
+    mimetypes.add_type('application/atom+xml', '.atom')
+if not getattr(mimetypes, 'types_map').has_key('.opensearchdescription'):        
+    mimetypes.add_type('application/opensearchdescription+xml', \
+                       '.opensearchdescription')
 
 
 def extend_element(element, collection_to_append):

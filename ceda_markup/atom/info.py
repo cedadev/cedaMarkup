@@ -43,12 +43,12 @@ XHTML_TYPE = 'xhtml'
 TYPES = [TEXT_TYPE, HTML_TYPE, XHTML_TYPE]
 
 def _assignTypeAtribute(itype, markup, body):
-    if itype not in TYPES:
-        raise Exception("Type is not allowed")
+#    if itype not in TYPES:
+#        raise Exception("Type is not allowed")
 
     if itype != TEXT_TYPE:
         markup.set('type', itype)
-    if itype == HTML_TYPE or itype == TEXT_TYPE:
+    if itype != XHTML_TYPE:
         markup.text = body
 
     if itype == XHTML_TYPE and isinstance(body, Element):
