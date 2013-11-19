@@ -64,9 +64,9 @@ def filter_results(results, count = COUNT_DEFAULT, \
                         or is not a list or is an empty list
     """
     if results is None:
-        return None
+        return []
     elif isinstance(results, list) and len(results) == 0:
-        return None
+        return []
     elif not isinstance(results, list):
         _results = [results]
     else:
