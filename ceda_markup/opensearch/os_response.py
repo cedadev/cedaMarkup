@@ -84,4 +84,9 @@ def createOpenSearchRespose(root, totalResults = None, startIndex = None, \
         markup = createItemsPerPage(itemsPerPage, root)
         root.append(markup)
                        
-    root.append(query)
+    tmp_query = query
+    for key in query.attrib.keys():
+        if query.attrib[key] is None:
+            tmp_query.attrib.pop[key]
+                       
+    root.append(tmp_query)
