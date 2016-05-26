@@ -10,8 +10,8 @@ opensearch
 
    template/index
    os_engine
+   os_description
    os_query
-   os_request
    os_response
    os_engine_helper   
 

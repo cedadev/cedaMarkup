@@ -28,32 +28,15 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Created on 5 May 2012
+Created on 18 May 2016
 
-@author: Maurizio Nagni
+@author: wilsona
 '''
 
+# The default name to use for the description document.
+DESCRIPTION_FILE_NAME = 'description.xml'
 
-class OSParam(object):
-    '''
-    classdocs
-    '''
 
-    def __init__(self, par_name, term_name, default=None, required=False,
-                 namespace=None, namespace_prefix=None):
-        '''
-        Constructor
-        @param par_name: http parameter's name
-        @param term_name: query template's parameter name
-        @param default: the default value
-        @param required: is this parameter required? Default = false
-        @param namespace: the namespace where this parameter is defined
-        @param namespace_prefix: the prefix of the namespace where this
-                parameter is defined
-        '''
-        self.par_name = par_name
-        self.term_name = term_name
-        self.required = required
-        self.default = default
-        self.namespace = namespace
-        self.namespace_prefix = namespace_prefix
+OS_NAMESPACE = 'http://a9.com/-/spec/opensearch/1.1/'
+OS_PREFIX = 'os'
+OS_ROOT_TAG = 'OpenSearchDescription'

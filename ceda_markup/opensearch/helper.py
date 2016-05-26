@@ -28,32 +28,43 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Created on 5 May 2012
+Created on 18 May 2016
 
-@author: Maurizio Nagni
+@author: wilsona
 '''
 
 
-class OSParam(object):
-    '''
-    classdocs
-    '''
+def assign_prefix(root, param):
+    """
+    Assign a prefix to a parameter.
 
-    def __init__(self, par_name, term_name, default=None, required=False,
-                 namespace=None, namespace_prefix=None):
-        '''
-        Constructor
-        @param par_name: http parameter's name
-        @param term_name: query template's parameter name
-        @param default: the default value
-        @param required: is this parameter required? Default = false
-        @param namespace: the namespace where this parameter is defined
-        @param namespace_prefix: the prefix of the namespace where this
-                parameter is defined
-        '''
-        self.par_name = par_name
-        self.term_name = term_name
-        self.required = required
-        self.default = default
-        self.namespace = namespace
-        self.namespace_prefix = namespace_prefix
+    If a prefix is available in the parameter object use that otherwise
+    generate a prefix. Add the namespace for the parameter to the root object
+    using the prefix.
+
+    @param root: the root tag of the document
+    @param param: an os_param object
+
+    @return: a string containing the prefix:tern_name
+
+    """
+    if param.namespace is None or param.namespace == root.attrib['xmlns']:
+        return param.term_name
+
+    for key, value in root.items():
+        if value == param.namespace:
+            return ("%s:%s") % (key[6:], param.term_name)
+
+    # use the user defined prefix for the namespace
+    if param.namespace_prefix:
+        root.set("xmlns:%s" % (param.namespace_prefix), param.namespace)
+        return ("%s:%s") % (param.namespace_prefix, param.term_name)
+
+    index = 0
+    while True:
+        if "xmlns:a%d" % (index) not in root.keys():
+            break
+        index = index + 1
+
+    root.set("xmlns:a%d" % (index), param.namespace)
+    return ("a%d:%s") % (index, param.term_name)
