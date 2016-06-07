@@ -5,24 +5,24 @@
 #
 # Copyright (c) 2006, Steve R. Hastings
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
-# 
+#
 #     * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
-# 
+#
 #     * Redistributions in binary form must reproduce the above copyright
 #       notice, this list of conditions and the following disclaimer in
 #       the documentation and/or other materials provided with the
 #       distribution.
-# 
+#
 #     * Neither the name of Steve R. Hastings nor the names
 #       of any contributors may be used to endorse or promote products
 #       derived from this software without specific prior written
 #       permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
 # IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
 # TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
@@ -34,7 +34,6 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 
 
 """
@@ -51,7 +50,6 @@ local time values.  A TF of 0.0 means the epoch in UTC.
 Please send questions, comments, and bug reports to: pyfeed@langri.com
 
 """
-
 
 
 import re
@@ -84,7 +82,6 @@ from ceda_markup.date.tools import parse_time_offset
 # They are both a tf of 1.0.
 
 
-
 def cleanup_time_offset(time_offset):
     """
     Given a time offset, return a time offset in a consistent format.
@@ -101,8 +98,8 @@ def cleanup_time_offset(time_offset):
     return s_time_offset_from_secs(secs)
 
 
-
 _s_format_rfc822 = "%a, %d %b %Y %H:%M:%S"
+
 
 def timestamp_from_tf(tf, time_offset=None):
     """
@@ -130,7 +127,6 @@ def timestamp_from_tf(tf, time_offset=None):
     if time_offset is None:
         time_offset = s_offset_default
 
-
     # converting from tf to timestamp so *add* time offset
     tf += parse_time_offset(time_offset)
 
@@ -140,7 +136,6 @@ def timestamp_from_tf(tf, time_offset=None):
         return "<!-- date out of range; tf is %.1f -->" % tf
 
     return "%s %s" % (s, time_offset)
-
 
 
 # date recognition pattern
@@ -162,6 +157,7 @@ _pat_rfc822 = re.compile(r"""
 """, re.X)
 
 _s_date_parse_format = "%d %b %Y %H:%M:%S"
+
 
 def tf_from_timestamp(s_timestamp):
     """
@@ -222,7 +218,6 @@ def tf_from_timestamp(s_timestamp):
     return float(tf)
 
 
-
 def s_time_offset_from_secs(secs):
     """
     Return a string with offset from UTC in RFC 882 format, from secs.
@@ -261,6 +256,7 @@ s_offset_local = local_time_offset()
 offset_default = 0
 s_offset_default = ""
 
+
 def set_default_time_offset(s):
     global offset_default
     global s_offset_default
@@ -268,7 +264,6 @@ def set_default_time_offset(s):
     s_offset_default = s
 
 set_default_time_offset(s_offset_local)
-
 
 
 if __name__ == "__main__":
@@ -289,16 +284,15 @@ if __name__ == "__main__":
 
         if result != correct:
             failed_tests += 1
-            #print module_banner
-            print "test failed:", message
-            print "    correct:", correct
-            print "    result: ", result
-            print
+            # print(module_banner)
+            print("test failed:", message)
+            print("    correct:", correct)
+            print("    result: ", result)
+            print()
 
     # The default is to make time stamps in local time with appropriate
     # offset; for the tests, we want a "GMT" offset default instead.
     set_default_time_offset("GMT")
-
 
     # Test: convert current time into a timestamp string and back
 
@@ -310,14 +304,12 @@ if __name__ == "__main__":
     result = tf_from_timestamp(s)
     self_test("convert tf to timestamp and back 0")
 
-
     # Test: convert a timestamp string to a time value and back
 
     correct = "Tue, 10 Jun 2003 04:00:00 GMT"
     tf = tf_from_timestamp(correct)
     result = timestamp_from_tf(tf)
     self_test("convert timestamp to tf and back 0")
-
 
     # Test: convert a timestamp string to a time value and back
 
@@ -327,7 +319,6 @@ if __name__ == "__main__":
     correct = "Tue, 10 Jun 2003 08:00:00 GMT"
     self_test("convert timestamp to tf and back 1")
 
-
     # Test: convert a timestamp string to a time value and back
 
     correct = "Wed, 08 Mar 2006 13:30:56 PST"
@@ -335,14 +326,12 @@ if __name__ == "__main__":
     result = timestamp_from_tf(tf, "PST")
     self_test("convert timestamp to tf and back 2")
 
-
     # Test: convert a timestamp string to a time value and back
 
     correct = "Wed, 14 Jun 2006 13:30:56 PDT"
     tf = tf_from_timestamp(correct)
     result = timestamp_from_tf(tf, "PDT")
     self_test("convert timestamp to tf and back 3")
-
 
     # Test: convert a timestamp string to a time value and back
 
@@ -352,7 +341,6 @@ if __name__ == "__main__":
     result = timestamp_from_tf(tf, "PDT")
     self_test("convert timestamp to tf and back 4")
 
-
     # Test: convert a timestamp string to a time value and back
 
     correct = "Fri, 08 Mar 1996 13:30:56 PDT"
@@ -360,7 +348,6 @@ if __name__ == "__main__":
     tf = tf_from_timestamp(s_test)
     result = timestamp_from_tf(tf, "PDT")
     self_test("convert timestamp to tf and back 5")
-
 
     # Test: convert a timestamp string to a time value and back
 
@@ -370,7 +357,6 @@ if __name__ == "__main__":
     result = timestamp_from_tf(tf, "PDT")
     self_test("convert timestamp to tf and back 6: fractional seconds")
 
-
     # Test: convert a timestamp string to a time value and back
 
     correct = "Fri, 08 Mar 1996 13:30:56 PDT"
@@ -379,23 +365,20 @@ if __name__ == "__main__":
     result = timestamp_from_tf(tf, "PDT")
     self_test("convert timestamp to tf and back 7: bizarre whitespace")
 
-
     # Test: convert a tf to a a timestamp string
 
     correct = "Fri, 07 Apr 2006 11:38:34 -0700"
     result = timestamp_from_tf(1144435114, "-0700")
     self_test("convert tf to timestamp 0")
 
-
-
     from sys import exit
-    s_module = '' #module_name + " " + module_version
+    s_module = ''  # module_name + " " + module_version
     if failed_tests == 0:
-        print s_module + ": self-test: all tests succeeded!"
+        print(s_module + ": self-test: all tests succeeded!")
         exit(0)
     elif failed_tests == 1:
-        print s_module + " self-test: 1 test failed."
+        print(s_module + " self-test: 1 test failed.")
         exit(1)
     else:
-        print s_module + " self-test: %d tests failed." % failed_tests
+        print(s_module + " self-test: %d tests failed." % failed_tests)
         exit(1)

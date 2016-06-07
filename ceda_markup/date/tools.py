@@ -5,24 +5,24 @@
 #
 # Copyright (c) 2006, Steve R. Hastings
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
-# 
+#
 #     * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
-# 
+#
 #     * Redistributions in binary form must reproduce the above copyright
 #       notice, this list of conditions and the following disclaimer in
 #       the documentation and/or other materials provided with the
 #       distribution.
-# 
+#
 #     * Neither the name of Steve R. Hastings nor the names
 #       of any contributors may be used to endorse or promote products
 #       derived from this software without specific prior written
 #       permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
 # IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
 # TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
@@ -34,8 +34,6 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
 
 
 """
@@ -62,12 +60,12 @@ def local_from_utc(tf):
     """
     return tf - time.timezone
 
+
 def utc_from_local(tf):
     """
     Take a time float with local time and return a tf with UTC time.
     """
     return tf + time.timezone
-
 
 
 def tf_local():
@@ -76,12 +74,12 @@ def tf_local():
     """
     return time.time() - time.timezone
 
+
 def tf_utc():
     """
     Return a time float with the current time in UTC time.
     """
     return time.time()
-
 
 
 # _tz_offset_dict
@@ -102,6 +100,7 @@ _tz_offset_dict = {
 
 _pat_time_offset = re.compile("([+-])(\d\d):?(\d\d?)?")
 
+
 def parse_time_offset(s):
     """
     Given a time offset string, return the offset from UTC, in seconds.
@@ -119,14 +118,14 @@ def parse_time_offset(s):
     try:
         s = s.lstrip().rstrip().lower()
     except AttributeError:
-        raise TypeError, "time offset must be a string"
+        raise TypeError("time offset must be a string")
 
     if s in _tz_offset_dict:
         return _tz_offset_dict[s] * 3600
 
     m = _pat_time_offset.search(s)
     if not m:
-        raise ValueError, "invalid time offset string"
+        raise ValueError("invalid time offset string")
 
     sign = m.group(1)
     offset_hour = int(m.group(2))
@@ -140,7 +139,6 @@ def parse_time_offset(s):
         offset *= -1
 
     return offset
-
 
 
 def tf_from_s(s):
@@ -160,7 +158,6 @@ def tf_from_s(s):
     return None
 
 
-
 class TimeSeq(object):
     """
     A class to generate a sequence of timestamps.
@@ -169,20 +166,17 @@ class TimeSeq(object):
     value, so this provides a convenient way to set a bunch of timestamps
     all at least one second different from each other.
     """
+
     def __init__(self, init_time=None):
         if init_time is None:
             self.tf = float(int(tf_utc()))
         else:
             self.tf = float(init_time)
+
     def next(self):
         tf = self.tf
         self.tf += 1.0
         return tf
-
-
-
-
-
 
 
 if __name__ == "__main__":
@@ -203,12 +197,11 @@ if __name__ == "__main__":
 
         if result != correct:
             failed_tests += 1
-            #print module_banner
-            print "test failed:", message
-            print "    correct:", correct
-            print "    result: ", result
-            print
-
+            # print(module_banner)
+            print("test failed:", message)
+            print("    correct:", correct)
+            print("    result: ", result)
+            print()
 
     correct = 1141607495.0
     result = utc_from_local(local_from_utc(correct))
@@ -226,15 +219,14 @@ if __name__ == "__main__":
     result = tf_from_s("Thu, 23 Mar 2006  11.30.23.00 PST")
     self_test("tf_from_s() test 2")
 
-
     from sys import exit
-    s_module = '' #module_name + " " + module_version
+    s_module = ''  # module_name + " " + module_version
     if failed_tests == 0:
-        print s_module + " self-test: all tests succeeded!"
+        print(s_module + " self-test: all tests succeeded!")
         exit(0)
     elif failed_tests == 1:
-        print s_module + " self-test: 1 test failed."
+        print(s_module + " self-test: 1 test failed.")
         exit(1)
     else:
-        print s_module + " self-test: %d tests failed." % failed_tests
+        print(s_module + " self-test: %d tests failed." % failed_tests)
         exit(1)
