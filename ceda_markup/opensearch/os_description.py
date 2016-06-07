@@ -371,10 +371,10 @@ class OpenSearchDescription(object):
         """
         markup = createSimpleMarkup(
             url, root, 'Image', OS_NAMESPACE, OS_PREFIX)
-        if height is not None and isinstance(height, (int, long)):
+        if height is not None and isinstance(height, (int, int)):
             markup.set("height", height)
 
-        if width is not None and isinstance(width, (int, long)):
+        if width is not None and isinstance(width, (int, int)):
             markup.set("width", width)
         return markup
 

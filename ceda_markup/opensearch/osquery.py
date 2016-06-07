@@ -73,13 +73,13 @@ class OSQuery(object):
             self.rel = URL_REL_DEFAULT
 
         if (indexOffset is not None and
-                isinstance(indexOffset, (int, long)) and indexOffset > 0):
+                isinstance(indexOffset, (int, int)) and indexOffset > 0):
             self.indexOffset = indexOffset
         else:
             self.indexOffset = URL_INDEX_OFFSET_DEFAULT
 
         if (pageOffset is not None and
-                isinstance(pageOffset, (int, long)) and pageOffset > 0):
+                isinstance(pageOffset, (int, int)) and pageOffset > 0):
             self.pageOffset = pageOffset
         else:
             self.pageOffset = URL_PAGE_OFFSET_DEFAULT

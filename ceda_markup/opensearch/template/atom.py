@@ -112,7 +112,8 @@ class OSAtomResponse(OSEngineResponse):
 
         self.generate_entries(atomdoc, results.subresult)
 
-        xml = '<?xml version="1.0" encoding="utf-8"?>%s' % tostring(atomdoc)
+        xml = ('<?xml version="1.0" encoding="utf-8"?>%s' %
+               tostring(atomdoc, encoding='unicode'))
 
         reparsed = minidom.parseString(xml)
         return reparsed.toprettyxml()
