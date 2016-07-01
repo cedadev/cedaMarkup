@@ -76,7 +76,7 @@ class Result(object):
     def __init__(self, count, start_index, start_page, total_results,
                  iid=None, title="Discovery feed for Search Services",
                  updated=datetime.now().isoformat(), subresult=[],
-                 subtitle=None):
+                 subtitle=None, authors=[]):
         '''
             Constructor
             @param count: the number of search results per page desired by the
@@ -91,6 +91,7 @@ class Result(object):
             @param updated: the last time the record was updated
             @param subresult: a Subresult list
             @param subtitle: the results subtitle
+            @param authors: an Author list
         '''
         self.count = count
         self.start_index = start_index
@@ -101,6 +102,7 @@ class Result(object):
         self.updated = updated
         self.subresult = subresult
         self.subtitle = subtitle
+        self.authors = authors
 
 
 class Subresult(object):
@@ -120,3 +122,19 @@ class Subresult(object):
         self.updated = updated
         for k, v in kwargs.iteritems():
             setattr(self, k, v)
+
+
+class Person(object):
+
+    def __init__(self, name, email=None, uri=None):
+        """
+        Constructor.
+
+        @param name (str): the name of the author
+        @param email (str): the email of the author
+        @param uri (str): the uri of the author
+
+        """
+        self.name = name
+        self.email = email
+        self.uri = uri

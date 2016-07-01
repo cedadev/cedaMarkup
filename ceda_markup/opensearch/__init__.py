@@ -40,7 +40,7 @@ from ceda_markup.opensearch.os_param import OSParam
 from ceda_markup.opensearch.osquery import OSQuery
 from ceda_markup.opensearch.template.atom import OSAtomResponse
 from ceda_markup.opensearch.template.json_response import OSJsonResponse
-from ceda_markup.opensearch.template.osresponse import Result
+from ceda_markup.opensearch.template.osresponse import Person, Result
 
 
 COUNT_DEFAULT = 10
@@ -49,8 +49,8 @@ START_PAGE_DEFAULT = 1
 
 
 __all__ = ['OSAtomResponse', 'OSJsonResponse', 'OSParam', 'OSQuery',
-           'OpenSearchDescription', 'Result', 'OS_PREFIX', 'OS_NAMESPACE',
-           'filter_results']
+           'OpenSearchDescription', 'Person', 'Result', 'OS_PREFIX',
+           'OS_NAMESPACE', 'filter_results']
 
 
 def filter_results(results, count=COUNT_DEFAULT,

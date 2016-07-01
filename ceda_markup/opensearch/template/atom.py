@@ -40,6 +40,7 @@ from ceda_markup.atom import REL_SELF, REL_FIRST, REL_NEXT,\
     REL_LAST, REL_PREV
 from ceda_markup.atom.atom import createAtomDocument, ATOM_NAMESPACE, \
     ATOM_PREFIX, create_autodiscovery_link
+from ceda_markup.atom.person import createAuthor
 from ceda_markup.opensearch.os_response import createOpenSearchRespose
 from ceda_markup.opensearch.template.osresponse import OSEngineResponse
 
@@ -57,7 +58,7 @@ class OSAtomResponse(OSEngineResponse):
         super(OSAtomResponse, self).__init__('atom')
 
     @abstractmethod
-    def generate_entries(self, atomroot, subresults):
+    def generate_entries(self, atomroot, subresults, url):
         """
         An implementation of this method should construct an XML element
         containing the subresults.
@@ -65,6 +66,7 @@ class OSAtomResponse(OSEngineResponse):
         @param atomroot (ElementTree.Element): the root tag of the document
                 containing this element
         @param subresults (list): a list of results
+        @param url (str): a URL including path
 
         @return an ElementTree.Element  containing the atom entries
 
@@ -93,7 +95,7 @@ class OSAtomResponse(OSEngineResponse):
             url = '%s/' % url
 
         # Generates the ATOM document
-        atomdoc = createAtomDocument(url + "atom", results.title,
+        atomdoc = createAtomDocument(url + self.extension, results.title,
                                      results.updated,
                                      subtitle=results.subtitle)
 
@@ -110,7 +112,12 @@ class OSAtomResponse(OSEngineResponse):
                                 results.start_index, results.count, query,
                                 params_model)
 
-        self.generate_entries(atomdoc, results.subresult)
+        # Insert the authors
+        for author in results.authors:
+            atomdoc.append(createAuthor(author.name, email=author.email,
+                                        uri=author.uri, root=atomdoc))
+
+        self.generate_entries(atomdoc, results.subresult, url + self.extension)
 
         xml = ('<?xml version="1.0" encoding="utf-8"?>%s' %
                tostring(atomdoc, encoding='unicode'))
@@ -126,30 +133,34 @@ class OSAtomResponse(OSEngineResponse):
         atomroot.append(create_autodiscovery_link
                         (atomroot, path, params_model, context, self.extension,
                          rel=REL_SELF, start_index=result.start_index))
+
+        # do not display other navigation links if there are no results
+        if result.total_result == 0:
+            return
+
         atomroot.append(create_autodiscovery_link
                         (atomroot, path, params_model, context, self.extension,
                          rel=REL_FIRST, start_index=1))
 
+        # only display next if the last result is not on this page
         if result.total_result >= result.start_index + result.count:
             atomroot.append(create_autodiscovery_link
                             (atomroot, path, params_model, context,
                              self.extension, rel=REL_NEXT,
                              start_index=result.start_index + result.count))
-        else:
-            atomroot.append(create_autodiscovery_link
-                            (atomroot, path, params_model, context,
-                             self.extension, rel=REL_NEXT,
-                             start_index=result.start_index))
 
-        if result.start_index - result.count > 0:
-            atomroot.append(create_autodiscovery_link
-                            (atomroot, path, params_model, context,
-                             self.extension, rel=REL_PREV,
-                             start_index=result.start_index - result.count))
-        else:
-            atomroot.append(create_autodiscovery_link
-                            (atomroot, path, params_model, context,
-                             self.extension, rel=REL_PREV, start_index=1))
+        # only display previous if the first result is not on this page
+        if result.start_index > 1:
+            if result.start_index - result.count > 0:
+                atomroot.append(create_autodiscovery_link
+                                (atomroot, path, params_model, context,
+                                 self.extension, rel=REL_PREV,
+                                 start_index=result.start_index - result.count)
+                                )
+            else:
+                atomroot.append(create_autodiscovery_link
+                                (atomroot, path, params_model, context,
+                                 self.extension, rel=REL_PREV, start_index=1))
 
         last_index = (result.total_result - result.start_index) % result.count
         atomroot.append(create_autodiscovery_link
