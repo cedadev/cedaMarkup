@@ -118,6 +118,9 @@ class OSQuery(object):
         if self.pageOffset is not None \
                 and self.pageOffset != URL_PAGE_OFFSET_DEFAULT:
             markup.set("pageOffset", str(self.pageOffset))
+
+        self.add_parameter_markup(markup)
+
         return markup
 
     def _create_template_query(self, root):
@@ -145,3 +148,15 @@ class OSQuery(object):
 
             template_query += ("%s&") % (url_param)
         return template_query
+
+    @abstractmethod
+    def add_parameter_markup(self, url_element):
+        """
+        Add the parameter markup.
+
+        This method should be used to add the Open Search Parameter Extension
+        markup to the URL element.
+
+        @param url_element (str): the URL element of an description document
+        """
+        pass

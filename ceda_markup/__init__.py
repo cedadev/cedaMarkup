@@ -47,7 +47,7 @@ if '.opensearchdescription' not in getattr(mimetypes, 'types_map').keys():
     mimetypes.add_type('application/opensearchdescription+xml',
                        '.opensearchdescription')
 
-__version__ = '0.2.0.dev2'
+__version__ = '0.2.0.dev3'
 
 
 def get_mimetype(extension):
